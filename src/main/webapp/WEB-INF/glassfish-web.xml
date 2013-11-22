@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE glassfish-web-app PUBLIC "-//GlassFish.org//DTD GlassFish Application Server 3.1 Servlet 3.0//EN" "http://glassfish.org/dtds/glassfish-web-app_3_0-1.dtd">
+<glassfish-web-app error-url="">
+  <context-root>/rtb</context-root>
+  <class-loader delegate="true"/>
+  <parameter-encoding default-charset="UTF-8"/>
+  <session-config>
+    <session-properties>
+      <property name="enableCookies" value="false"/>
+    </session-properties>
+  </session-config>
+  <!--<property name="alternatedocroot_1" value="from=/upload/* dir=/data/upload/ehr.91yong.com/"/>-->
+</glassfish-web-app>
