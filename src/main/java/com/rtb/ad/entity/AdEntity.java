@@ -19,7 +19,7 @@ import java.util.Map;
 @RDaoConfig(
         tableName = "RtbAd")
 @ParametersConfig()
-public class AdEntity extends Entity implements Parameter {
+public final class AdEntity extends Entity implements Parameter {
 
     @ParameterConfig(basicTypeEnum = BasicTypeEnum.UUID, desc = "广告id")
     @RColumnConfig(columnTypeEnum = ColumnTypeEnum.KEY, desc = "广告id")

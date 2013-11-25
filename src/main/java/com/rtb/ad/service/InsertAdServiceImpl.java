@@ -1,6 +1,7 @@
 package com.rtb.ad.service;
 
 import com.rtb.ad.entity.AdEntity;
+import com.rtb.ad.entity.AdPointEntity;
 import com.rtb.ad.localservice.AdLocalService;
 import com.rtb.config.ActionGroupNames;
 import com.rtb.config.ActionNames;
@@ -20,8 +21,8 @@ import java.util.Map;
         actionName = ActionNames.INSERT_AD,
         parameterTypeEnum = ParameterTypeEnum.PARAMETER,
         importantParameter = {"adName", "imageId", "url"},
-        returnParameter = {"adId", "adName", "imageId", "url", "clickNumber", "clickPoint", "lastUpdateTime"},
-        parametersConfigs = {AdEntity.class},
+        returnParameter = {"adId", "adName", "imageId", "url", "clickNumber", "clickPoint", "lastUpdateTime", "adPoint"},
+        parametersConfigs = {AdEntity.class, AdPointEntity.class},
         response = true,
         description = "新增广告",
         group = ActionGroupNames.AD)
@@ -42,7 +43,9 @@ public class InsertAdServiceImpl implements Service {
         Session session = messageContext.getSession();
         parameterMap.put("userId", session.getUserId());
         AdEntity adEntity = this.adLocalService.insertAndInquireAd(parameterMap);
-        messageContext.setEntityData(adEntity);
+        Map<String, String> resultMap = adEntity.toMap();
+        resultMap.put("adPoint", "0");
+        messageContext.setMapData(resultMap);
         messageContext.success();
     }
 }

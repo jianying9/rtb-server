@@ -19,7 +19,7 @@ import java.util.Map;
 @RDaoConfig(
         tableName = "RtbImage")
 @ParametersConfig()
-public class ImageEntity extends Entity implements Parameter {
+public final class ImageEntity extends Entity implements Parameter {
 
     @ParameterConfig(basicTypeEnum = BasicTypeEnum.UUID, desc = "图片id")
     @RColumnConfig(columnTypeEnum = ColumnTypeEnum.KEY, desc = "图片id")

@@ -1,5 +1,6 @@
 package com.rtb.ad.localservice;
 
+import com.rtb.ad.entity.AdBiddingEntity;
 import com.rtb.ad.entity.AdEntity;
 import com.rtb.ad.entity.AdPointEntity;
 import com.wolf.framework.dao.REntityDao;
@@ -15,7 +16,7 @@ import java.util.Map;
  */
 @LocalServiceConfig(
         interfaceInfo = AdLocalService.class,
-        description = "用户操作内部接口")
+        description = "广告操作内部接口")
 public class AdLocalServiceImpl implements AdLocalService {
 
     @InjectRDao(clazz = AdEntity.class)
@@ -23,6 +24,9 @@ public class AdLocalServiceImpl implements AdLocalService {
     //
     @InjectRDao(clazz = AdPointEntity.class)
     private REntityDao<AdPointEntity> adPointEntityDao;
+    //
+    @InjectRDao(clazz = AdBiddingEntity.class)
+    private REntityDao<AdBiddingEntity> adBiddingEntityDao;
 
     @Override
     public void init() {
@@ -32,7 +36,7 @@ public class AdLocalServiceImpl implements AdLocalService {
     public AdEntity insertAndInquireAd(Map<String, String> parameterMap) {
         return this.adEntityDao.insertAndInquire(parameterMap);
     }
-    
+
     @Override
     public AdEntity inquireAdByAdId(String adId) {
         return this.adEntityDao.inquireByKey(adId);
@@ -58,25 +62,40 @@ public class AdLocalServiceImpl implements AdLocalService {
     public List<AdEntity> inquireAdByAdIdList(List<String> adIdList) {
         return this.adEntityDao.inquireByKeys(adIdList);
     }
-    
+
     //
     @Override
     public AdPointEntity insertAndInquireAdPoint(Map<String, String> parameterMap) {
         return this.adPointEntityDao.insertAndInquire(parameterMap);
     }
-    
+
     @Override
     public AdPointEntity updateAndInquireAdPoint(Map<String, String> parameterMap) {
         return this.adPointEntityDao.updateAndInquire(parameterMap);
     }
-    
+
     @Override
     public AdPointEntity inquireAdPointByAdId(String adId) {
         return this.adPointEntityDao.inquireByKey(adId);
     }
-    
+
     @Override
     public List<AdPointEntity> inquireAdPointByAdIdList(List<String> adIdList) {
         return this.adPointEntityDao.inquireByKeys(adIdList);
+    }
+
+    @Override
+    public AdBiddingEntity inquireAdBiddingByPositionId(String positionId) {
+        return this.adBiddingEntityDao.inquireByKey(positionId);
+    }
+
+    @Override
+    public void insertAdBidding(Map<String, String> parameterMap) {
+        this.adBiddingEntityDao.insert(parameterMap);
+    }
+
+    @Override
+    public void updateAdBidding(Map<String, String> parameterMap) {
+        this.adBiddingEntityDao.update(parameterMap);
     }
 }

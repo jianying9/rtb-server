@@ -1,5 +1,6 @@
 package com.rtb.ad.localservice;
 
+import com.rtb.ad.entity.AdBiddingEntity;
 import com.rtb.ad.entity.AdEntity;
 import com.rtb.ad.entity.AdPointEntity;
 import com.wolf.framework.local.Local;
@@ -30,4 +31,11 @@ public interface AdLocalService extends Local{
     public AdPointEntity inquireAdPointByAdId(String adId);
     
     public List<AdPointEntity> inquireAdPointByAdIdList(List<String> adIdList);
+    
+    //
+    public AdBiddingEntity inquireAdBiddingByPositionId(String positionId);
+    
+    public void insertAdBidding(Map<String, String> parameterMap);
+    
+    public void updateAdBidding(Map<String, String> parameterMap);
 }

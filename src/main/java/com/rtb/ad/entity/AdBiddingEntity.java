@@ -17,32 +17,40 @@ import java.util.Map;
  * @author aladdin
  */
 @RDaoConfig(
-        tableName = "RtbAdPoint")
+        tableName = "RtbAdBidding")
 @ParametersConfig()
-public final class AdPointEntity extends Entity implements Parameter {
+public final class AdBiddingEntity extends Entity implements Parameter {
 
+    @ParameterConfig(basicTypeEnum = BasicTypeEnum.INT, desc = "广告位id,[0,9]")
+    @RColumnConfig(columnTypeEnum = ColumnTypeEnum.KEY, desc = "广告位id")
+    private String positionId;
+    //
     @ParameterConfig(basicTypeEnum = BasicTypeEnum.UUID, desc = "广告id")
-    @RColumnConfig(columnTypeEnum = ColumnTypeEnum.KEY, desc = "广告id")
+    @RColumnConfig(desc = "广告id")
     private String adId;
     //
-    @ParameterConfig(basicTypeEnum = BasicTypeEnum.INT, desc = "广告剩余点数")
-    @RColumnConfig(desc = "广告剩余点数", defaultValue = "0")
-    private int adPoint;
+    @ParameterConfig(basicTypeEnum = BasicTypeEnum.INT, desc = "出价")
+    @RColumnConfig(desc = "出价")
+    private int bid;
     //
     @ParameterConfig(basicTypeEnum = BasicTypeEnum.DATE_TIME, desc = "创建时间")
-    @RColumnConfig(desc = "创建时间", defaultValue = "1384957981862")
+    @RColumnConfig(desc = "创建时间")
     private long createTime;
     //
     @ParameterConfig(basicTypeEnum = BasicTypeEnum.DATE_TIME, desc = "最后修改时间")
     @RColumnConfig(desc = "最后修改时间", defaultValue = "1384957981862")
     private long lastUpdateTime;
 
+    public String getPositionId() {
+        return positionId;
+    }
+
     public String getAdId() {
         return adId;
     }
 
-    public int getAdPoint() {
-        return this.adPoint;
+    public int getBid() {
+        return bid;
     }
 
     public long getCreateTime() {
@@ -60,9 +68,10 @@ public final class AdPointEntity extends Entity implements Parameter {
 
     @Override
     public Map<String, String> toMap() {
-        Map<String, String> map = new HashMap<String, String>(4, 1);
+        Map<String, String> map = new HashMap<String, String>(8, 1);
+        map.put("positionId", this.positionId);
         map.put("adId", this.adId);
-        map.put("adPoint", Integer.toString(this.adPoint));
+        map.put("bid", Integer.toString(this.bid));
         map.put("createTime", Long.toString(this.createTime));
         map.put("lastUpdateTime", Long.toString(this.lastUpdateTime));
         return map;
@@ -70,8 +79,9 @@ public final class AdPointEntity extends Entity implements Parameter {
 
     @Override
     protected void parseMap(Map<String, String> entityMap) {
+        this.positionId = entityMap.get("positionId");
         this.adId = entityMap.get("adId");
-        this.adPoint = Integer.parseInt(entityMap.get("adPoint"));
+        this.bid = Integer.parseInt(entityMap.get("bid"));
         this.createTime = Long.parseLong(entityMap.get("createTime"));
         this.lastUpdateTime = Long.parseLong(entityMap.get("lastUpdateTime"));
     }

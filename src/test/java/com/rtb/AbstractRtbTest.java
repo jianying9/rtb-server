@@ -28,7 +28,7 @@ public abstract class AbstractRtbTest {
         parameterMap.put(FrameworkConfig.REDIS_MAX_POOL_SIZE, "1");
         parameterMap.put(FrameworkConfig.REDIS_MIN_POOL_SIZE, "2");
         this.testHandler = new TestHandler(parameterMap);
-        Session session = new SessionImpl("ad35482f-daef-4a35-aecb-de7e22777709");
+        Session session = new SessionImpl("c9028bdc-2a8c-4100-9156-9a0f267c64cb");
         this.testHandler.setSession(session);
     }
 
