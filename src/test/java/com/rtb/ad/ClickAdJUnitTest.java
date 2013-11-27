@@ -12,9 +12,9 @@ import org.junit.Test;
  *
  * @author aladdin
  */
-public class AdBiddingJUnitTest extends AbstractRtbTest {
+public class ClickAdJUnitTest extends AbstractRtbTest {
 
-    public AdBiddingJUnitTest() {
+    public ClickAdJUnitTest() {
     }
 
     @Before
@@ -30,9 +30,9 @@ public class AdBiddingJUnitTest extends AbstractRtbTest {
     public void test() {
         Map<String, String> parameterMap = new HashMap<String, String>(4, 1);
         parameterMap.put("positionId", "2");
-        parameterMap.put("adId", "68f4e1ca-006a-45ae-9216-7d6b4c210a0c");
-        parameterMap.put("bid", "3");
-        String result = this.testHandler.execute(ActionNames.AD_BIDDING, parameterMap);
+        parameterMap.put("adId", "1a4f529f-aa00-48f7-b94f-94b2de7f130d");
+        parameterMap.put("bid", "2");
+        String result = this.testHandler.execute(ActionNames.CLICK_AD, parameterMap);
         System.out.println(result);
     }
 }

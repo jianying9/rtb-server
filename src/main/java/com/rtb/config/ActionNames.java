@@ -34,5 +34,5 @@ public class ActionNames {
     //查询广告位当前投放广告
     public final static String INQUIRE_POSITION_AD = "INQUIRE_POSITION_AD";
     //广告广告点击记录
-    public final static String INSERT_AD_CLICK = "INSERT_AD_CLICK";
+    public final static String CLICK_AD = "CLICK_AD";
 }

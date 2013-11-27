@@ -41,6 +41,11 @@ public class AdLocalServiceImpl implements AdLocalService {
     public AdEntity inquireAdByAdId(String adId) {
         return this.adEntityDao.inquireByKey(adId);
     }
+    
+    @Override
+    public void updateAd(Map<String, String> parameterMap) {
+        this.adEntityDao.update(parameterMap);
+    }
 
     @Override
     public List<AdEntity> inquirePageByUserId(String userId, int pageIndex, int pageSize) {
@@ -73,6 +78,11 @@ public class AdLocalServiceImpl implements AdLocalService {
     public AdPointEntity updateAndInquireAdPoint(Map<String, String> parameterMap) {
         return this.adPointEntityDao.updateAndInquire(parameterMap);
     }
+    
+    @Override
+    public void updateAdPoint(Map<String, String> parameterMap) {
+        this.adPointEntityDao.update(parameterMap);
+    }
 
     @Override
     public AdPointEntity inquireAdPointByAdId(String adId) {
@@ -97,5 +107,10 @@ public class AdLocalServiceImpl implements AdLocalService {
     @Override
     public void updateAdBidding(Map<String, String> parameterMap) {
         this.adBiddingEntityDao.update(parameterMap);
+    }
+
+    @Override
+    public void deleteAdBidding(String positionId) {
+        this.adBiddingEntityDao.delete(positionId);
     }
 }

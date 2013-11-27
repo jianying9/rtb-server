@@ -17,6 +17,8 @@ public interface AdLocalService extends Local{
     
     public AdEntity inquireAdByAdId(String adId);
     
+    public void updateAd(Map<String, String> parameterMap);
+    
     public List<AdEntity> inquirePageByUserId(String userId, int pageIndex, int pageSize);
     
     public List<String> inquireAdIdPageByUserId(String userId, int pageIndex, int pageSize);
@@ -28,6 +30,8 @@ public interface AdLocalService extends Local{
     
     public AdPointEntity updateAndInquireAdPoint(Map<String, String> parameterMap);
     
+    public void updateAdPoint(Map<String, String> parameterMap);
+    
     public AdPointEntity inquireAdPointByAdId(String adId);
     
     public List<AdPointEntity> inquireAdPointByAdIdList(List<String> adIdList);
@@ -38,4 +42,6 @@ public interface AdLocalService extends Local{
     public void insertAdBidding(Map<String, String> parameterMap);
     
     public void updateAdBidding(Map<String, String> parameterMap);
+    
+    public void deleteAdBidding(String positionId);
 }

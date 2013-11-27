@@ -1,6 +1,7 @@
 package com.rtb.ad.service;
 
 import com.rtb.ad.entity.AdBiddingEntity;
+import com.rtb.ad.entity.AdPointEntity;
 import com.rtb.ad.localservice.AdLocalService;
 import com.rtb.config.ActionGroupNames;
 import com.rtb.config.ActionNames;
@@ -32,26 +33,30 @@ public class AdBiddingServiceImpl implements Service {
     @Override
     public void execute(MessageContext messageContext) {
         Map<String, String> parameterMap = messageContext.getParameterMap();
-        String positionId = parameterMap.get("positionId");
-        AdBiddingEntity adBiddingEntity = this.adLocalService.inquireAdBiddingByPositionId(positionId);
-        if(adBiddingEntity == null) {
-            //该广告位暂时无人竞价
-            String time = Long.toString(System.currentTimeMillis());
-            parameterMap.put("createTime", time);
-            parameterMap.put("lastUpdateTime", time);
-            this.adLocalService.insertAdBidding(parameterMap);
-            messageContext.setMapData(parameterMap);
-            messageContext.success();
-        } else {
-            //已有竞价，判断价格高低
-            int bid = Integer.parseInt(parameterMap.get("bid"));
-            if(bid > adBiddingEntity.getBid()) {
-                //竞价更高,成功获取广告位
+        String adId = parameterMap.get("adId");
+        int bid = Integer.parseInt(parameterMap.get("bid"));
+        AdPointEntity adPointEntity = this.adLocalService.inquireAdPointByAdId(adId);
+        if (adPointEntity != null && adPointEntity.getAdPoint() >= bid) {
+            String positionId = parameterMap.get("positionId");
+            AdBiddingEntity adBiddingEntity = this.adLocalService.inquireAdBiddingByPositionId(positionId);
+            if (adBiddingEntity == null) {
+                //该广告位暂时无人竞价
                 String time = Long.toString(System.currentTimeMillis());
+                parameterMap.put("createTime", time);
                 parameterMap.put("lastUpdateTime", time);
-                this.adLocalService.updateAdBidding(parameterMap);
+                this.adLocalService.insertAdBidding(parameterMap);
                 messageContext.setMapData(parameterMap);
                 messageContext.success();
+            } else {
+                //已有竞价，判断价格高低
+                if (bid > adBiddingEntity.getBid()) {
+                    //竞价更高,成功获取广告位
+                    String time = Long.toString(System.currentTimeMillis());
+                    parameterMap.put("lastUpdateTime", time);
+                    this.adLocalService.updateAdBidding(parameterMap);
+                    messageContext.setMapData(parameterMap);
+                    messageContext.success();
+                }
             }
         }
     }
