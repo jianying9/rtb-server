@@ -52,7 +52,7 @@ public class InquireAdServiceImpl implements Service {
                 adPoint = "0";
                 for (AdPointEntity adPointEntity : adPointEntityList) {
                     if (adEntity.getAdId().equals(adPointEntity.getAdId())) {
-                        adPoint = Integer.toString(adPointEntity.getAdPoint());
+                        adPoint = Long.toString(adPointEntity.getAdPoint());
                         break;
                     }
                 }

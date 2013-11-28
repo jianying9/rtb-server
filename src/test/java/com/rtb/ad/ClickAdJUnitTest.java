@@ -30,8 +30,8 @@ public class ClickAdJUnitTest extends AbstractRtbTest {
     public void test() {
         Map<String, String> parameterMap = new HashMap<String, String>(4, 1);
         parameterMap.put("positionId", "2");
-        parameterMap.put("adId", "1a4f529f-aa00-48f7-b94f-94b2de7f130d");
-        parameterMap.put("bid", "2");
+        parameterMap.put("adId", "94c1c507-3edb-4a11-be4d-c830c32fd42b");
+        parameterMap.put("bid", "1");
         String result = this.testHandler.execute(ActionNames.CLICK_AD, parameterMap);
         System.out.println(result);
     }

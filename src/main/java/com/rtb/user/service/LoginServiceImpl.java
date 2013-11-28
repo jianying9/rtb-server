@@ -2,7 +2,7 @@ package com.rtb.user.service;
 
 import com.rtb.config.ActionGroupNames;
 import com.rtb.config.ActionNames;
-import com.rtb.config.RtbResponseFlags;
+import com.rtb.config.ResponseFlags;
 import com.rtb.session.SessionImpl;
 import com.rtb.user.entity.UserEntity;
 import com.rtb.user.localservice.UserLocalService;
@@ -32,7 +32,7 @@ import java.util.Map;
         description = "用户登录",
         group = ActionGroupNames.USER,
         responseFlags = {
-    @ResponseFlag(flag = RtbResponseFlags.FAILURE_EMAIL_NOT_EXIST,
+    @ResponseFlag(flag = ResponseFlags.FAILURE_EMAIL_NOT_EXIST,
             description = "邮箱已经被使用")
 })
 public class LoginServiceImpl implements Service {
@@ -47,7 +47,7 @@ public class LoginServiceImpl implements Service {
         UserEntity userEntity = this.userLocalService.inquireUserByUserEmail(userEmail);
         if (userEntity == null) {
             //邮箱不存在
-            messageContext.setFlag(RtbResponseFlags.FAILURE_EMAIL_NOT_EXIST);
+            messageContext.setFlag(ResponseFlags.FAILURE_EMAIL_NOT_EXIST);
         } else {
             //邮箱存在
             String password = parameterMap.get("password");
@@ -60,7 +60,7 @@ public class LoginServiceImpl implements Service {
                 messageContext.success();
             } else {
                 //密码错误
-                messageContext.setFlag(RtbResponseFlags.FAILURE_PASSWORD_ERROR);
+                messageContext.setFlag(ResponseFlags.FAILURE_PASSWORD_ERROR);
             }
         }
     }

@@ -12,9 +12,9 @@ import org.junit.Test;
  *
  * @author aladdin
  */
-public class ParForPointJUnitTest extends AbstractRtbTest {
+public class ParForPointServiceImplJUnitTest extends AbstractRtbTest {
 
-    public ParForPointJUnitTest() {
+    public ParForPointServiceImplJUnitTest() {
     }
 
     @Before

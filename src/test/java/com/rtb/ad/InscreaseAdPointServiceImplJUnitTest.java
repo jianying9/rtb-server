@@ -12,9 +12,9 @@ import org.junit.Test;
  *
  * @author aladdin
  */
-public class InquirePositionAdJUnitTest extends AbstractRtbTest {
+public class InscreaseAdPointServiceImplJUnitTest extends AbstractRtbTest {
 
-    public InquirePositionAdJUnitTest() {
+    public InscreaseAdPointServiceImplJUnitTest() {
     }
 
     @Before
@@ -29,8 +29,9 @@ public class InquirePositionAdJUnitTest extends AbstractRtbTest {
     @Test
     public void test() {
         Map<String, String> parameterMap = new HashMap<String, String>(2, 1);
-        parameterMap.put("positionId", "2");
-        String result = this.testHandler.execute(ActionNames.INQUIRE_POSITION_AD, parameterMap);
+        parameterMap.put("adPoint", "100");
+        parameterMap.put("adId", "94c1c507-3edb-4a11-be4d-c830c32fd42b");
+        String result = this.testHandler.execute(ActionNames.INCREASE_AD_POINT, parameterMap);
         System.out.println(result);
     }
 }

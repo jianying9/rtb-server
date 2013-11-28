@@ -4,7 +4,7 @@ package com.rtb.config;
  *
  * @author aladdin
  */
-public class RtbResponseFlags {
+public class ResponseFlags {
 
     //邮箱不存在
     public final static String FAILURE_EMAIL_NOT_EXIST = "FAILURE_EMAIL_NOT_EXIST";
@@ -14,4 +14,6 @@ public class RtbResponseFlags {
     public final static String FAILURE_PASSWORD_ERROR = "FAILURE_PASSWORD_ERROR";
     //邮箱已经被使用
     public final static String FAILURE_USER_EMAIL_USED = "FAILURE_USER_EMAIL_USED";
+    //昵称已经被使用
+    public final static String FAILURE_USER_NICK_NAME_USED = "FAILURE_USER_NICK_NAME_USED";
 }

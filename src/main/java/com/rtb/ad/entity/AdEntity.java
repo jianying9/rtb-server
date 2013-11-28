@@ -37,13 +37,13 @@ public final class AdEntity extends Entity implements Parameter {
     @RColumnConfig(desc = "广告链接")
     private String url;
     //
-    @ParameterConfig(basicTypeEnum = BasicTypeEnum.INT, desc = "累计点击次数")
-    @RColumnConfig(desc = "累计点击次数", defaultValue = "0")
-    private int clickNumber;
+    @ParameterConfig(basicTypeEnum = BasicTypeEnum.LONG, desc = "累计点击次数")
+    @RColumnConfig(desc = "累计点击次数")
+    private long clickNumber;
     //
-    @ParameterConfig(basicTypeEnum = BasicTypeEnum.INT, desc = "累计点击消耗点数")
-    @RColumnConfig(desc = "累计点击消耗点数", defaultValue = "0")
-    private int clickPoint;
+    @ParameterConfig(basicTypeEnum = BasicTypeEnum.LONG, desc = "累计点击消耗点数")
+    @RColumnConfig(desc = "累计点击消耗点数")
+    private long clickPoint;
     //
     @ParameterConfig(basicTypeEnum = BasicTypeEnum.UUID, desc = "用户id")
     @RColumnConfig(columnTypeEnum = ColumnTypeEnum.INDEX, desc = "用户id")
@@ -54,7 +54,7 @@ public final class AdEntity extends Entity implements Parameter {
     private long createTime;
     //
     @ParameterConfig(basicTypeEnum = BasicTypeEnum.DATE_TIME, desc = "最后修改时间")
-    @RColumnConfig(desc = "最后修改时间", defaultValue = "1384957981862")
+    @RColumnConfig(desc = "最后修改时间")
     private long lastUpdateTime;
 
     public String getAdId() {
@@ -73,11 +73,11 @@ public final class AdEntity extends Entity implements Parameter {
         return url;
     }
 
-    public int getClickNumber() {
+    public long getClickNumber() {
         return clickNumber;
     }
 
-    public int getClickPoint() {
+    public long getClickPoint() {
         return clickPoint;
     }
 
@@ -105,8 +105,8 @@ public final class AdEntity extends Entity implements Parameter {
         map.put("adName", this.adName);
         map.put("imageId", this.imageId);
         map.put("url", this.url);
-        map.put("clickNumber", Integer.toString(this.clickNumber));
-        map.put("clickPoint", Integer.toString(this.clickPoint));
+        map.put("clickNumber", Long.toString(this.clickNumber));
+        map.put("clickPoint", Long.toString(this.clickPoint));
         map.put("createTime", Long.toString(this.createTime));
         map.put("lastUpdateTime", Long.toString(this.lastUpdateTime));
         return map;
@@ -118,8 +118,8 @@ public final class AdEntity extends Entity implements Parameter {
         this.adName = entityMap.get("adName");
         this.imageId = entityMap.get("imageId");
         this.url = entityMap.get("url");
-        this.clickNumber = Integer.parseInt(entityMap.get("clickNumber"));
-        this.clickPoint = Integer.parseInt(entityMap.get("clickPoint"));
+        this.clickNumber = Long.parseLong(entityMap.get("clickNumber"));
+        this.clickPoint = Long.parseLong(entityMap.get("clickPoint"));
         this.createTime = Long.parseLong(entityMap.get("createTime"));
         this.lastUpdateTime = Long.parseLong(entityMap.get("lastUpdateTime"));
     }

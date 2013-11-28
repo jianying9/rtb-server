@@ -29,9 +29,9 @@ public final class AdBiddingEntity extends Entity implements Parameter {
     @RColumnConfig(desc = "广告id")
     private String adId;
     //
-    @ParameterConfig(basicTypeEnum = BasicTypeEnum.INT, desc = "出价")
+    @ParameterConfig(basicTypeEnum = BasicTypeEnum.LONG, desc = "出价")
     @RColumnConfig(desc = "出价")
-    private int bid;
+    private long bid;
     //
     @ParameterConfig(basicTypeEnum = BasicTypeEnum.DATE_TIME, desc = "创建时间")
     @RColumnConfig(desc = "创建时间")
@@ -49,7 +49,7 @@ public final class AdBiddingEntity extends Entity implements Parameter {
         return adId;
     }
 
-    public int getBid() {
+    public long getBid() {
         return bid;
     }
 
@@ -71,7 +71,7 @@ public final class AdBiddingEntity extends Entity implements Parameter {
         Map<String, String> map = new HashMap<String, String>(8, 1);
         map.put("positionId", this.positionId);
         map.put("adId", this.adId);
-        map.put("bid", Integer.toString(this.bid));
+        map.put("bid", Long.toString(this.bid));
         map.put("createTime", Long.toString(this.createTime));
         map.put("lastUpdateTime", Long.toString(this.lastUpdateTime));
         return map;
@@ -81,7 +81,7 @@ public final class AdBiddingEntity extends Entity implements Parameter {
     protected void parseMap(Map<String, String> entityMap) {
         this.positionId = entityMap.get("positionId");
         this.adId = entityMap.get("adId");
-        this.bid = Integer.parseInt(entityMap.get("bid"));
+        this.bid = Long.parseLong(entityMap.get("bid"));
         this.createTime = Long.parseLong(entityMap.get("createTime"));
         this.lastUpdateTime = Long.parseLong(entityMap.get("lastUpdateTime"));
     }

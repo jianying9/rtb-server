@@ -2,7 +2,7 @@ package com.rtb.user.service;
 
 import com.rtb.config.ActionGroupNames;
 import com.rtb.config.ActionNames;
-import com.rtb.config.RtbResponseFlags;
+import com.rtb.config.ResponseFlags;
 import com.rtb.user.entity.UserEntity;
 import com.rtb.user.localservice.UserLocalService;
 import com.wolf.framework.local.InjectLocalService;
@@ -38,17 +38,24 @@ public class RegisterServiceImpl implements Service {
         String userEmail = parameterMap.get("userEmail");
         synchronized (this) {
             //查询邮箱是否被使用
-            boolean isUserEmailExists = this.userLocalService.isUserEmailExist(userEmail);
-            if (isUserEmailExists) {
+            boolean isExists = this.userLocalService.isUserEmailExist(userEmail);
+            if (isExists) {
                 //邮箱已经被使用
-                messageContext.setFlag(RtbResponseFlags.FAILURE_USER_EMAIL_USED);
+                messageContext.setFlag(ResponseFlags.FAILURE_USER_EMAIL_USED);
             } else {
-                //新增加用户
-                parameterMap.put("createTime", Long.toString(System.currentTimeMillis()));
-                parameterMap.put("point", "0");
-                UserEntity userEntity = this.userLocalService.insertAndInquireUser(parameterMap);
-                messageContext.setEntityData(userEntity);
-                messageContext.success();
+                String nickName = parameterMap.get("nickName");
+                isExists = this.userLocalService.isNickNameExist(nickName);
+                if (isExists) {
+                    //昵称已经被使用
+                    messageContext.setFlag(ResponseFlags.FAILURE_USER_NICK_NAME_USED);
+                } else {
+                    //新增加用户
+                    parameterMap.put("createTime", Long.toString(System.currentTimeMillis()));
+                    parameterMap.put("point", "0");
+                    UserEntity userEntity = this.userLocalService.insertAndInquireUser(parameterMap);
+                    messageContext.setEntityData(userEntity);
+                    messageContext.success();
+                }
             }
         }
     }

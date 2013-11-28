@@ -26,7 +26,7 @@ public final class UserEntity extends Entity implements Parameter {
     private String userId;
     //
     @ParameterConfig(basicTypeEnum = BasicTypeEnum.CHAR_32, desc = "昵称")
-    @RColumnConfig(columnTypeEnum = ColumnTypeEnum.INDEX, desc = "昵称")
+    @RColumnConfig(desc = "昵称")
     private String nickName;
     //
     @RColumnConfig(desc = "密码md5")
@@ -34,12 +34,12 @@ public final class UserEntity extends Entity implements Parameter {
     private String password;
     //
     @ParameterConfig(basicTypeEnum = BasicTypeEnum.CHAR_60, desc = "邮箱")
-    @RColumnConfig(columnTypeEnum = ColumnTypeEnum.INDEX, desc = "邮箱")
+    @RColumnConfig(desc = "邮箱")
     private String userEmail;
     //
-    @ParameterConfig(basicTypeEnum = BasicTypeEnum.INT, desc = "点数", defaultValue = "0")
+    @ParameterConfig(basicTypeEnum = BasicTypeEnum.LONG, desc = "点数")
     @RColumnConfig(desc = "点数")
-    private int point;
+    private long point;
     //
     @ParameterConfig(basicTypeEnum = BasicTypeEnum.DATE_TIME, desc = "注册时间")
     @RColumnConfig(desc = "注册时间")
@@ -61,7 +61,7 @@ public final class UserEntity extends Entity implements Parameter {
         return userEmail;
     }
 
-    public int getPoint() {
+    public long getPoint() {
         return point;
     }
 
@@ -81,7 +81,7 @@ public final class UserEntity extends Entity implements Parameter {
         map.put("nickName", this.nickName);
         map.put("password", this.password);
         map.put("userEmail", this.userEmail);
-        map.put("point", Integer.toString(this.point));
+        map.put("point", Long.toString(this.point));
         map.put("createTime", Long.toString(this.createTime));
         return map;
     }
@@ -92,7 +92,7 @@ public final class UserEntity extends Entity implements Parameter {
         this.nickName = entityMap.get("nickName");
         this.password = entityMap.get("password");
         this.userEmail = entityMap.get("userEmail");
-        this.point = Integer.parseInt(entityMap.get("point"));
+        this.point = Long.parseLong(entityMap.get("point"));
         this.createTime = Long.parseLong(entityMap.get("createTime"));
     }
 }

@@ -28,7 +28,7 @@ public class ActionNames {
     //查询当前登录用户广告列表
     public final static String INQUIRE_AD = "INQUIRE_AD";
     //增加广告剩余点数
-    public final static String ADD_AD_POINT = "ADD_AD_POINT";
+    public final static String INCREASE_AD_POINT = "INCREASE_AD_POINT";
     //竞价
     public final static String AD_BIDDING = "AD_BIDDING";
     //查询广告位当前投放广告

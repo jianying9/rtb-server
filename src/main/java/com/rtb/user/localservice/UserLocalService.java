@@ -12,6 +12,8 @@ import java.util.Map;
 public interface UserLocalService extends Local{
 
     public boolean isUserEmailExist(String userEmail);
+    
+    public boolean isNickNameExist(String nickName);
 
     public UserEntity inquireUserByUserEmail(String userEmail);
 
@@ -22,4 +24,6 @@ public interface UserLocalService extends Local{
     public UserEntity insertAndInquireUser(Map<String, String> parameterMap);
     
     public UserEntity updateUserAndInquire(Map<String, String> parameterMap);
+    
+    public long increasePoint(String userId, long point);
 }

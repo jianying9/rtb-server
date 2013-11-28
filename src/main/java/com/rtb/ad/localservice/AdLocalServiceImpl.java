@@ -41,7 +41,7 @@ public class AdLocalServiceImpl implements AdLocalService {
     public AdEntity inquireAdByAdId(String adId) {
         return this.adEntityDao.inquireByKey(adId);
     }
-    
+
     @Override
     public void updateAd(Map<String, String> parameterMap) {
         this.adEntityDao.update(parameterMap);
@@ -68,6 +68,16 @@ public class AdLocalServiceImpl implements AdLocalService {
         return this.adEntityDao.inquireByKeys(adIdList);
     }
 
+    @Override
+    public long increaseClickNum(String adId, long clickNumber) {
+        return this.adEntityDao.increase(adId, "clickNumber", clickNumber);
+    }
+
+    @Override
+    public long increaseClickPoint(String adId, long clickPoint) {
+        return this.adEntityDao.increase(adId, "clickPoint", clickPoint);
+    }
+
     //
     @Override
     public AdPointEntity insertAndInquireAdPoint(Map<String, String> parameterMap) {
@@ -75,10 +85,15 @@ public class AdLocalServiceImpl implements AdLocalService {
     }
 
     @Override
+    public long increaseAdPoint(String adId, long adPoint) {
+        return this.adPointEntityDao.increase(adId, "adPoint", adPoint);
+    }
+
+    @Override
     public AdPointEntity updateAndInquireAdPoint(Map<String, String> parameterMap) {
         return this.adPointEntityDao.updateAndInquire(parameterMap);
     }
-    
+
     @Override
     public void updateAdPoint(Map<String, String> parameterMap) {
         this.adPointEntityDao.update(parameterMap);

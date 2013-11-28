@@ -1,4 +1,4 @@
-package com.rtb.ad;
+package com.rtb.user;
 
 import com.rtb.AbstractRtbTest;
 import com.rtb.config.ActionNames;
@@ -12,9 +12,9 @@ import org.junit.Test;
  *
  * @author aladdin
  */
-public class InquirePositionAdJUnitTest extends AbstractRtbTest {
+public class InquirePointServiceImplJUnitTest extends AbstractRtbTest {
 
-    public InquirePositionAdJUnitTest() {
+    public InquirePointServiceImplJUnitTest() {
     }
 
     @Before
@@ -29,8 +29,7 @@ public class InquirePositionAdJUnitTest extends AbstractRtbTest {
     @Test
     public void test() {
         Map<String, String> parameterMap = new HashMap<String, String>(2, 1);
-        parameterMap.put("positionId", "2");
-        String result = this.testHandler.execute(ActionNames.INQUIRE_POSITION_AD, parameterMap);
+        String result = this.testHandler.execute(ActionNames.INQUIRE_POINT, parameterMap);
         System.out.println(result);
     }
 }

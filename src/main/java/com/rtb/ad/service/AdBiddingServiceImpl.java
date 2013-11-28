@@ -20,7 +20,7 @@ import java.util.Map;
         actionName = ActionNames.AD_BIDDING,
         parameterTypeEnum = ParameterTypeEnum.PARAMETER,
         importantParameter = {"positionId", "bid", "adId"},
-        returnParameter = {"positionId", "adId"},
+        returnParameter = {"positionId", "adId", "bid"},
         parametersConfigs = {AdBiddingEntity.class},
         response = true,
         description = "广告竞价",
@@ -34,7 +34,7 @@ public class AdBiddingServiceImpl implements Service {
     public void execute(MessageContext messageContext) {
         Map<String, String> parameterMap = messageContext.getParameterMap();
         String adId = parameterMap.get("adId");
-        int bid = Integer.parseInt(parameterMap.get("bid"));
+        long bid = Long.parseLong(parameterMap.get("bid"));
         AdPointEntity adPointEntity = this.adLocalService.inquireAdPointByAdId(adId);
         if (adPointEntity != null && adPointEntity.getAdPoint() >= bid) {
             String positionId = parameterMap.get("positionId");
