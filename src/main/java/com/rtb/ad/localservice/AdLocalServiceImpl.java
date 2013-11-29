@@ -3,12 +3,20 @@ package com.rtb.ad.localservice;
 import com.rtb.ad.entity.AdBiddingEntity;
 import com.rtb.ad.entity.AdEntity;
 import com.rtb.ad.entity.AdPointEntity;
+import com.wolf.framework.context.ApplicationContext;
 import com.wolf.framework.dao.REntityDao;
 import com.wolf.framework.dao.annotation.InjectRDao;
 import com.wolf.framework.dao.condition.InquireRedisIndexContext;
 import com.wolf.framework.local.LocalServiceConfig;
+import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
+import kafka.javaapi.producer.Producer;
+import kafka.javaapi.producer.ProducerData;
+import kafka.producer.ProducerConfig;
+import org.codehaus.jackson.map.ObjectMapper;
 
 /**
  *
@@ -27,9 +35,21 @@ public class AdLocalServiceImpl implements AdLocalService {
     //
     @InjectRDao(clazz = AdBiddingEntity.class)
     private REntityDao<AdBiddingEntity> adBiddingEntityDao;
+    //kakfa消息生产者
+    private  Producer<Integer, String> producer;
+    //接收广告点击消息的topic
+    private final String launchTopic = "AD_LAUNCH";
+    //接收竞价消息的topic
+    private final String biddingTopic = "AD_BIDDING";
+    
 
     @Override
     public void init() {
+        String zkConnect = ApplicationContext.CONTEXT.getParameter("kafka.zk.connect");
+        Properties props = new Properties();
+        props.put("serializer.class", "kafka.serializer.StringEncoder");
+        props.put("zk.connect", zkConnect);
+        this.producer = new Producer<Integer, String>(new ProducerConfig(props));
     }
 
     @Override
@@ -127,5 +147,45 @@ public class AdLocalServiceImpl implements AdLocalService {
     @Override
     public void deleteAdBidding(String positionId) {
         this.adBiddingEntityDao.delete(positionId);
+    }
+
+    @Override
+    public void sendLaunchMessage(String adId, String positionId, String tagId, String bid) {
+        Map<String, String> messageMap = new HashMap<String, String>(4, 1);
+        messageMap.put("AdId", adId);
+        messageMap.put("PosId", positionId);
+        messageMap.put("TagId", tagId);
+        messageMap.put("Price", bid);
+        ObjectMapper mapper = new ObjectMapper();
+        String messageJsonString = "";
+        try {
+            messageJsonString = mapper.writeValueAsString(messageMap);
+        } catch (IOException ex) {
+            throw new RuntimeException(ex);
+        }
+        if(messageJsonString.isEmpty() == false) {
+            ProducerData<Integer, String> messageData = new ProducerData<Integer, String>(this.launchTopic, messageJsonString);
+            this.producer.send(messageData);
+        }
+    }
+
+    @Override
+    public void sendBiddingMessage(String adId, String positionId, String tagId, String bid) {
+        Map<String, String> messageMap = new HashMap<String, String>(4, 1);
+        messageMap.put("AdId", adId);
+        messageMap.put("PosId", positionId);
+        messageMap.put("TagId", tagId);
+        messageMap.put("Price", bid);
+        ObjectMapper mapper = new ObjectMapper();
+        String messageJsonString = "";
+        try {
+            messageJsonString = mapper.writeValueAsString(messageMap);
+        } catch (IOException ex) {
+            throw new RuntimeException(ex);
+        }
+        if(messageJsonString.isEmpty() == false) {
+            ProducerData<Integer, String> messageData = new ProducerData<Integer, String>(this.biddingTopic, messageJsonString);
+            this.producer.send(messageData);
+        }
     }
 }

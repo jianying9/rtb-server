@@ -38,14 +38,15 @@ public class ClickAdServiceImpl implements Service {
         String adId = messageContext.getParameter("adId");
         AdEntity adEntity = this.adLocalService.inquireAdByAdId(adId);
         if (adEntity != null) {
-            long bid = Long.parseLong(messageContext.getParameter("bid"));
+            String bidStr = messageContext.getParameter("bid");
+            long bid = Long.parseLong(bidStr);
             AdPointEntity adPointEntity = this.adLocalService.inquireAdPointByAdId(adId);
             if (adPointEntity != null) {
                 //扣点
                 long newAdPoint = this.adLocalService.increaseAdPoint(adId, -bid);
                 //如果adPoint <= 0,则空出广告位
+                String positionId = messageContext.getParameter("positionId");
                 if (newAdPoint <= 0) {
-                    String positionId = messageContext.getParameter("positionId");
                     AdBiddingEntity adBiddingEntity = this.adLocalService.inquireAdBiddingByPositionId(positionId);
                     if (adBiddingEntity != null) {
                         if (adBiddingEntity.getAdId().equals(adId)) {
@@ -56,6 +57,8 @@ public class ClickAdServiceImpl implements Service {
                 //广告累计统计
                 this.adLocalService.increaseClickNum(adId, 1);
                 this.adLocalService.increaseClickPoint(adId, bid);
+                //发送广告点击消息到kafka
+                this.adLocalService.sendLaunchMessage(adId, positionId, "1", bidStr);
             }
         }
     }

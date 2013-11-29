@@ -34,7 +34,8 @@ public class AdBiddingServiceImpl implements Service {
     public void execute(MessageContext messageContext) {
         Map<String, String> parameterMap = messageContext.getParameterMap();
         String adId = parameterMap.get("adId");
-        long bid = Long.parseLong(parameterMap.get("bid"));
+        String bidStr = parameterMap.get("bid");
+        long bid = Long.parseLong(bidStr);
         AdPointEntity adPointEntity = this.adLocalService.inquireAdPointByAdId(adId);
         if (adPointEntity != null && adPointEntity.getAdPoint() >= bid) {
             String positionId = parameterMap.get("positionId");
@@ -58,6 +59,8 @@ public class AdBiddingServiceImpl implements Service {
                     messageContext.success();
                 }
             }
+            //发送竞价消息
+            this.adLocalService.sendBiddingMessage(adId, positionId, "1", bidStr);
         }
     }
 }

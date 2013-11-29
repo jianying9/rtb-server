@@ -30,5 +30,9 @@
     "redis.min.pool.size": {
         "value": "2",
         "describe": "redis连接池最小连接数"
+    },
+    "kafka.zk.connect": {
+        "value": "nd059048.mq.nd:2181",
+        "describe": "kafka消息接收地址"
     }
 }
