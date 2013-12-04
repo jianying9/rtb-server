@@ -1,5 +1,6 @@
 package com.rtb.ad.entity;
 
+import com.rtb.config.RedisTableNames;
 import com.wolf.framework.dao.Entity;
 import com.wolf.framework.dao.annotation.ColumnTypeEnum;
 import com.wolf.framework.dao.annotation.RColumnConfig;
@@ -17,19 +18,19 @@ import java.util.Map;
  * @author aladdin
  */
 @RDaoConfig(
-        tableName = "RtbAdPoint")
+        tableName = RedisTableNames.RTB_AD_POINT)
 @ParametersConfig()
 public final class AdPointEntity extends Entity implements Parameter {
 
-    @ParameterConfig(basicTypeEnum = BasicTypeEnum.UUID, desc = "广告id")
-    @RColumnConfig(columnTypeEnum = ColumnTypeEnum.KEY, desc = "广告id")
-    private String adId;
+    @ParameterConfig(basicTypeEnum = BasicTypeEnum.LONG, desc = "广告Id")
+    @RColumnConfig(columnTypeEnum = ColumnTypeEnum.KEY, desc = "广告Id")
+    private long adId;
     //
-    @ParameterConfig(basicTypeEnum = BasicTypeEnum.INT, desc = "广告剩余点数")
+    @ParameterConfig(basicTypeEnum = BasicTypeEnum.LONG, desc = "广告剩余点数")
     @RColumnConfig(desc = "广告剩余点数")
     private long adPoint;
 
-    public String getAdId() {
+    public long getAdId() {
         return adId;
     }
 
@@ -39,20 +40,20 @@ public final class AdPointEntity extends Entity implements Parameter {
 
     @Override
     public String getKeyValue() {
-        return this.adId;
+        return Long.toString(this.adId);
     }
 
     @Override
     public Map<String, String> toMap() {
         Map<String, String> map = new HashMap<String, String>(2, 1);
-        map.put("adId", this.adId);
+        map.put("adId", Long.toString(this.adId));
         map.put("adPoint", Long.toString(this.adPoint));
         return map;
     }
 
     @Override
     protected void parseMap(Map<String, String> entityMap) {
-        this.adId = entityMap.get("adId");
+        this.adId = Long.parseLong(entityMap.get("adId"));
         this.adPoint = Long.parseLong(entityMap.get("adPoint"));
     }
 }

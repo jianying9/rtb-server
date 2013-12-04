@@ -1,10 +1,13 @@
 package com.rtb.user.localservice;
 
+import com.rtb.config.RedisTableNames;
+import com.rtb.key.localservice.RedisKeyLocalService;
 import com.rtb.user.entity.UserEmailEntity;
 import com.rtb.user.entity.UserEntity;
 import com.rtb.user.entity.UserNickNameEntity;
 import com.wolf.framework.dao.REntityDao;
 import com.wolf.framework.dao.annotation.InjectRDao;
+import com.wolf.framework.local.InjectLocalService;
 import com.wolf.framework.local.LocalServiceConfig;
 import java.util.List;
 import java.util.Map;
@@ -26,6 +29,9 @@ public class UserLocalServiceImpl implements UserLocalService {
     //
     @InjectRDao(clazz = UserNickNameEntity.class)
     private REntityDao<UserNickNameEntity> userNickNameEntityDao;
+    //
+    @InjectLocalService()
+    private RedisKeyLocalService redisKeyLocalService;
 
     @Override
     public void init() {
@@ -63,6 +69,9 @@ public class UserLocalServiceImpl implements UserLocalService {
 
     @Override
     public UserEntity insertAndInquireUser(Map<String, String> parameterMap) {
+        //生成主键
+        long userId = this.redisKeyLocalService.getNextKeyValue(RedisTableNames.RTB_USER);
+        parameterMap.put("userId", Long.toString(userId));
         //保存用户信息
         UserEntity userEntity = this.userEntityDao.insertAndInquire(parameterMap);
         //保存userEmail和userId映射
@@ -80,7 +89,8 @@ public class UserLocalServiceImpl implements UserLocalService {
         if (userEmailEntity == null) {
             userEntity = null;
         } else {
-            userEntity = this.userEntityDao.inquireByKey(userEmailEntity.getUserId());
+            long userId = userEmailEntity.getUserId();
+            userEntity = this.userEntityDao.inquireByKey(Long.toString(userId));
         }
         return userEntity;
     }

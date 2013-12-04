@@ -7,7 +7,6 @@ import com.rtb.session.SessionImpl;
 import com.rtb.user.entity.UserEntity;
 import com.rtb.user.localservice.UserLocalService;
 import com.wolf.framework.local.InjectLocalService;
-import com.wolf.framework.service.ParameterTypeEnum;
 import com.wolf.framework.service.ResponseFlag;
 import com.wolf.framework.service.Service;
 import com.wolf.framework.service.ServiceConfig;
@@ -22,7 +21,6 @@ import java.util.Map;
  */
 @ServiceConfig(
         actionName = ActionNames.LOGIN,
-        parameterTypeEnum = ParameterTypeEnum.PARAMETER,
         importantParameter = {"userEmail", "password"},
         returnParameter = {"userId", "userEmail", "nickName"},
         parametersConfigs = {UserEntity.class},
@@ -52,9 +50,9 @@ public class LoginServiceImpl implements Service {
             //邮箱存在
             String password = parameterMap.get("password");
             if (userEntity.getPassword().equals(password)) {
-                String userId = userEntity.getUserId();
+                long userId = userEntity.getUserId();
                 //密码正确
-                Session session = new SessionImpl(userId);
+                Session session = new SessionImpl(Long.toString(userId));
                 messageContext.setNewSession(session);
                 messageContext.setEntityData(userEntity);
                 messageContext.success();

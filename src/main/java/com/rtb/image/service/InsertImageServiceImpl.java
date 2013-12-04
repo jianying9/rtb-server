@@ -5,7 +5,6 @@ import com.rtb.config.ActionNames;
 import com.rtb.image.entity.ImageEntity;
 import com.rtb.image.localservice.ImageLocalService;
 import com.wolf.framework.local.InjectLocalService;
-import com.wolf.framework.service.ParameterTypeEnum;
 import com.wolf.framework.service.Service;
 import com.wolf.framework.service.ServiceConfig;
 import com.wolf.framework.worker.context.MessageContext;
@@ -17,7 +16,6 @@ import java.util.Map;
  */
 @ServiceConfig(
         actionName = ActionNames.INSERT_IMAGE,
-        parameterTypeEnum = ParameterTypeEnum.PARAMETER,
         importantParameter = {"dataUrl"},
         returnParameter = {"imageId"},
         parametersConfigs = {ImageEntity.class},

@@ -1,5 +1,6 @@
 package com.rtb.ad.entity;
 
+import com.rtb.config.RedisTableNames;
 import com.wolf.framework.dao.Entity;
 import com.wolf.framework.dao.annotation.ColumnTypeEnum;
 import com.wolf.framework.dao.annotation.RColumnConfig;
@@ -17,13 +18,13 @@ import java.util.Map;
  * @author aladdin
  */
 @RDaoConfig(
-        tableName = "RtbAd")
+        tableName = RedisTableNames.RTB_AD)
 @ParametersConfig()
 public final class AdEntity extends Entity implements Parameter {
 
-    @ParameterConfig(basicTypeEnum = BasicTypeEnum.UUID, desc = "广告id")
+    @ParameterConfig(basicTypeEnum = BasicTypeEnum.LONG, desc = "广告id")
     @RColumnConfig(columnTypeEnum = ColumnTypeEnum.KEY, desc = "广告id")
-    private String adId;
+    private long adId;
     //
     @ParameterConfig(basicTypeEnum = BasicTypeEnum.CHAR_32, desc = "广告标题")
     @RColumnConfig(desc = "广告标题")
@@ -57,7 +58,7 @@ public final class AdEntity extends Entity implements Parameter {
     @RColumnConfig(desc = "最后修改时间")
     private long lastUpdateTime;
 
-    public String getAdId() {
+    public long getAdId() {
         return adId;
     }
 
@@ -95,13 +96,13 @@ public final class AdEntity extends Entity implements Parameter {
 
     @Override
     public String getKeyValue() {
-        return this.adId;
+        return Long.toString(this.adId);
     }
 
     @Override
     public Map<String, String> toMap() {
         Map<String, String> map = new HashMap<String, String>(8, 1);
-        map.put("adId", this.adId);
+        map.put("adId", Long.toString(this.adId));
         map.put("adName", this.adName);
         map.put("imageId", this.imageId);
         map.put("url", this.url);
@@ -114,7 +115,7 @@ public final class AdEntity extends Entity implements Parameter {
 
     @Override
     protected void parseMap(Map<String, String> entityMap) {
-        this.adId = entityMap.get("adId");
+        this.adId = Long.parseLong(entityMap.get("adId"));
         this.adName = entityMap.get("adName");
         this.imageId = entityMap.get("imageId");
         this.url = entityMap.get("url");

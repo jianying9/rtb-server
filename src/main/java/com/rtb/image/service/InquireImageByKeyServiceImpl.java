@@ -5,7 +5,6 @@ import com.rtb.config.ActionNames;
 import com.rtb.image.entity.ImageEntity;
 import com.rtb.image.localservice.ImageLocalService;
 import com.wolf.framework.local.InjectLocalService;
-import com.wolf.framework.service.ParameterTypeEnum;
 import com.wolf.framework.service.Service;
 import com.wolf.framework.service.ServiceConfig;
 import com.wolf.framework.worker.context.MessageContext;
@@ -16,7 +15,6 @@ import com.wolf.framework.worker.context.MessageContext;
  */
 @ServiceConfig(
         actionName = ActionNames.INQUIRE_IMAGE_BY_KEY,
-        parameterTypeEnum = ParameterTypeEnum.PARAMETER,
         importantParameter = {"imageId"},
         returnParameter = {"imageId", "dataUrl"},
         parametersConfigs = {ImageEntity.class},

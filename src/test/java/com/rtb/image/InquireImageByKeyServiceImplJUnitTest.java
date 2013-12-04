@@ -29,7 +29,7 @@ public class InquireImageByKeyServiceImplJUnitTest extends AbstractRtbTest {
     @Test
     public void test() {
         Map<String, String> parameterMap = new HashMap<String, String>(2, 1);
-        parameterMap.put("imageId", "130e820c-adea-46ce-b105-1596293be669");
+        parameterMap.put("imageId", "1");
         String result = this.testHandler.execute(ActionNames.INQUIRE_IMAGE_BY_KEY, parameterMap);
         System.out.println(result);
     }

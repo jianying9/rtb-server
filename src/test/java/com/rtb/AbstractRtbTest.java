@@ -29,7 +29,7 @@ public abstract class AbstractRtbTest {
         parameterMap.put(FrameworkConfig.REDIS_MIN_POOL_SIZE, "2");
         parameterMap.put("kafka.zk.connect", "nd059048.mq.nd:2181");
         this.testHandler = new TestHandler(parameterMap);
-        Session session = new SessionImpl("9bc0e2d8-e8b5-4531-8768-e9d14bf27c35");
+        Session session = new SessionImpl("1");
         this.testHandler.setSession(session);
     }
 

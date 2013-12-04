@@ -8,7 +8,6 @@ import com.rtb.config.ActionNames;
 import com.rtb.user.entity.UserEntity;
 import com.rtb.user.localservice.UserLocalService;
 import com.wolf.framework.local.InjectLocalService;
-import com.wolf.framework.service.ParameterTypeEnum;
 import com.wolf.framework.service.Service;
 import com.wolf.framework.service.ServiceConfig;
 import com.wolf.framework.session.Session;
@@ -22,7 +21,6 @@ import java.util.Map;
  */
 @ServiceConfig(
         actionName = ActionNames.INCREASE_AD_POINT,
-        parameterTypeEnum = ParameterTypeEnum.PARAMETER,
         importantParameter = {"adPoint", "adId"},
         returnParameter = {"adId", "adPoint", "point"},
         parametersConfigs = {AdPointEntity.class, UserEntity.class},
@@ -50,7 +48,7 @@ public class IncreaseAdPointServiceImpl implements Service {
             //判断用户点数是否足够
             if (userEntity.getPoint() >= adPoint) {
                 //增加广告对应点数
-                long newAdPoint = this.adLocalService.increaseAdPoint(adId, adPoint);
+                long newAdPoint = this.adLocalService.increaseAdPoint(userId, adId, adPoint);
                 //扣除用户广告点数
                 long newPoint = this.userLocalService.increasePoint(userId, -adPoint);
                 //返回

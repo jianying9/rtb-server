@@ -6,7 +6,6 @@ import com.rtb.config.ResponseFlags;
 import com.rtb.user.entity.UserEntity;
 import com.rtb.user.localservice.UserLocalService;
 import com.wolf.framework.local.InjectLocalService;
-import com.wolf.framework.service.ParameterTypeEnum;
 import com.wolf.framework.service.Service;
 import com.wolf.framework.service.ServiceConfig;
 import com.wolf.framework.service.SessionHandleTypeEnum;
@@ -19,7 +18,6 @@ import com.wolf.framework.worker.context.MessageContext;
  */
 @ServiceConfig(
         actionName = ActionNames.LOGOUT,
-        parameterTypeEnum = ParameterTypeEnum.NO_PARAMETER,
         returnParameter = {"nickName", "userId"},
         parametersConfigs = {UserEntity.class},
         sessionHandleTypeEnum = SessionHandleTypeEnum.REMOVE,

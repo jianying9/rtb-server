@@ -1,0 +1,258 @@
+<?xml version="1.0"?>
+<?xml-stylesheet type="text/xsl" href="configuration.xsl"?>
+<!--
+/**
+ * Copyright 2010 The Apache Software Foundation
+ *
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+-->
+<configuration>
+	<property>
+		<name>hbase.master</name>
+		<value>longzhou-hdpnn.lz.dscc:30000</value>
+	</property>
+								
+	<property>
+		<name>hbase.master.port</name>
+		<value>30000</value>
+	</property>
+
+	<property>
+		<name>hbase.master.info.port</name>
+		<value>30080</value>
+	</property>
+
+	<property>
+		<name>hbase.rootdir</name>
+		<value>hdfs://longzhou-hdpnn.lz.dscc:11000/hbase</value>
+	</property>
+	
+	<property>
+		<name>hbase.tmp.dir</name>
+		<value>/home/${user.name}/hbase-data</value>
+	</property>
+	
+	<property>
+		<name>hbase.cluster.distributed</name>
+		<value>true</value>
+	</property>
+
+	<property>
+		<name>hbase.regionserver.port</name>
+		<value>30001</value>
+	</property>
+	
+	<property>
+		<name>hbase.regionserver.info.port</name>
+		<value>30081</value>
+	</property>
+
+	<property>
+		<name>hbase.zookeeper.property.clientPort</name>
+		<value>20000</value>
+	</property>
+	
+	<property>
+		<name>hbase.zookeeper.quorum</name>
+		<value>longzhou-hdpnn.lz.dscc, longzhou-hdp1.lz.dscc, longzhou-hdp2.lz.dscc, longzhou-hdp3.lz.dscc, longzhou-hdp4.lz.dscc</value>
+	</property>
+
+	<!-- performance conf -->
+	<property>
+		<name>zookeeper.session.timeout</name>
+		<value>1200000</value>
+		<description>ZooKeeper session timeout.
+			HBase passes this to the zk quorum as suggested maximum time for a
+			session.  See http://hadoop.apache.org/zookeeper/docs/current/zookeeperProgrammers.html#ch_zkSessions
+			"The client sends a requested timeout, the server responds with the
+			timeout that it can give the client. "
+			In milliseconds.
+		</description>
+	</property>
+
+	<property>
+		<name>hbase.zookeeper.property.tickTime</name>
+		<value>6000</value>
+	</property>
+
+	<property>
+		<name>hfile.block.cache.size</name>
+		<value>0.35</value>
+	</property>
+
+	<property>
+		<name>hbase.client.scanner.caching</name>
+		<value>5000</value>
+	</property>
+
+	<property>
+		<name>hbase.regionserver.lease.period</name>
+		<value>900000</value>
+		<description>HRegion server lease period in milliseconds. Default is
+			60 seconds. Clients must report in within this period else they are
+			considered dead.
+		</description>
+	</property>
+
+
+	<property>
+		<name>hbase.client.write.buffer</name>
+		<value>16777216</value>
+		<description>Default size of the HTable clien write buffer in bytes.
+			A bigger buffer takes more memory    on both the client and server
+			side since server instantiates the passed write buffer to process
+			it but a larger buffer size reduces the number of RPCs made.
+			For an estimate of server-side memory-used, evaluate
+			hbase.client.write.buffer * hbase.regionserver.handler.count
+		</description>
+	</property>
+
+	<property>
+		<name>hbase.master.wait.on.regionservers.timeout</name>
+		<value>10000</value>
+		<description>
+			test >6000ms
+		</description>
+	</property>
+
+	<property>
+		<name>hbase.regionserver.lease.period</name>
+		<value>1800000</value>
+		<description>HRegion server lease period in milliseconds. Default is
+			60 seconds. Clients must report in within this period else they are
+			considered dead.
+		</description>
+	</property>
+	  
+	<property>
+		<name>hbase.regionserver.handler.count</name>
+		<value>50</value>
+		<description>Count of RPC Server instances spun up on RegionServers
+			Same property is used by the Master for count of master handlers.
+			Default is 10.
+		</description>
+	</property>
+
+	<property>
+		<name>hbase.regionserver.restart.on.zk.expire</name>
+		<value>true</value>
+		<description>
+			Zookeeper session expired will force regionserver exit.
+			Enable this will make the regionserver restart.
+		</description>
+	</property>
+
+	<property>
+		<name>hbase.master.startup.retainassign</name>
+		<value>false</value>
+		<description>
+			In case for some reason the regions in your cluster are not well-balanced, 
+			you can tell HBase to reassign the regions in a round-robin fashion in the HBase master
+		</description>
+     </property>
+<!--	
+	<property>
+		<name>hbase.defaults.for.version.skip</name>
+		<value>true</value>
+	</property>
+-->
+	<!-- hbase kerberos security conf -->
+	<property>
+		<name>hbase.master.kerberos.principal</name>
+		<value>hbase/_HOST@LONGZHOU.DSCC</value>
+	</property>
+
+	<property>
+		<name>hbase.master.keytab.file</name>
+		<value>/home/hbase/hbase/conf/hbase.keytab</value>
+	</property>
+
+	<property>
+		<name>hbase.regionserver.kerberos.principal</name>
+		<value>hbase/_HOST@LONGZHOU.DSCC</value>
+	</property>
+
+	<property>
+		<name>hbase.regionserver.keytab.file</name>
+		<value>/home/hbase/hbase/conf/hbase.keytab</value>
+	</property>
+<!--
+	<property>
+		<name>hbase.zookeeper.client.kerberos.principal</name>
+		<value>hbase/_HOST@LONGONG.DSCC</value>
+	</property>
+
+            <property>
+                    <name>hbase.zookeeper.client.keytab.file</name>
+                    <value>/home/hbase/hbase/conf/hbase.keytab</value>
+            </property>
+    -->
+    <property>
+        <name>hbase.security.authentication</name>
+        <value>kerberos</value>
+    </property>
+	
+    <property>
+        <name>hbase.rpc.engine</name>
+        <value>org.apache.hadoop.hbase.ipc.SecureRpcEngine</value>
+    </property>
+
+    <!-- hbase authorization -->
+    <property>
+        <name>hbase.security.authorization</name>
+        <value>true</value>
+    </property>	
+
+    <property>
+        <name>hbase.coprocessor.master.classes</name>
+        <value>org.apache.hadoop.hbase.security.access.AccessController</value>
+    </property>
+
+    <property>
+        <name>hbase.coprocessor.region.classes</name>
+        <value>org.apache.hadoop.hbase.security.token.TokenProvider,org.apache.hadoop.hbase.security.access.AccessController</value>
+    </property>
+
+    <!-- thrift conf-->
+    <property>
+        <name>hbase.thrift.keytab.file</name>
+        <value>/home/hbase/hbase/conf/hbase.keytab</value>
+    </property>
+	
+    <property>
+        <name>hbase.thrift.kerberos.principal</name>
+        <value>hbase/_HOST@LONGZHOU.DSCC</value>
+    </property>
+
+    <!-- hadoop security conf -->
+    <property>
+        <name>hadoop.security.authentication</name>
+        <value>kerberos</value> 
+    </property>
+
+    <property>
+        <name>hadoop.security.authorization</name>
+        <value>true</value>
+    </property>
+
+    <property>
+        <name>hadoop.security.use-weak-http-crypto</name>
+        <value>false</value>
+    </property>
+
+</configuration>

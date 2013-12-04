@@ -6,7 +6,6 @@ import com.rtb.config.ResponseFlags;
 import com.rtb.user.entity.UserEntity;
 import com.rtb.user.localservice.UserLocalService;
 import com.wolf.framework.local.InjectLocalService;
-import com.wolf.framework.service.ParameterTypeEnum;
 import com.wolf.framework.service.Service;
 import com.wolf.framework.service.ServiceConfig;
 import com.wolf.framework.session.Session;
@@ -19,7 +18,6 @@ import java.util.Map;
  */
 @ServiceConfig(
         actionName = ActionNames.PAY_FOR_POINT,
-        parameterTypeEnum = ParameterTypeEnum.NO_PARAMETER,
         importantParameter = {"point"},
         returnParameter = {"point", "userId"},
         parametersConfigs = {UserEntity.class},

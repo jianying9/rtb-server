@@ -22,6 +22,10 @@ public class ActionNames {
     public final static String INQUIRE_POINT = "INQUIRE_POINT";
     //充值获取点数
     public final static String PAY_FOR_POINT = "PAY_FOR_POINT";
+    //增加用户标签
+    public final static String INSERT_USER_TAG = "INSERT_USER_TAG";
+    //查询用户标签
+    public final static String INQUIRE_USER_TAG = "INQUIRE_USER_TAG";
     //-----------------------用户------------------------//
     //新增广告
     public final static String INSERT_AD = "INSERT_AD";
@@ -35,4 +39,7 @@ public class ActionNames {
     public final static String INQUIRE_POSITION_AD = "INQUIRE_POSITION_AD";
     //广告广告点击记录
     public final static String CLICK_AD = "CLICK_AD";
+    //------------------------------
+    //新增标签
+    public final static String INSERT_TAG = "INSERT_TAG";
 }

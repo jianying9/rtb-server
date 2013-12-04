@@ -10,23 +10,25 @@ import com.wolf.framework.service.Service;
 import com.wolf.framework.service.ServiceConfig;
 import com.wolf.framework.session.Session;
 import com.wolf.framework.worker.context.MessageContext;
+import java.util.Map;
 
 /**
  *
  * @author aladdin
  */
 @ServiceConfig(
-        actionName = ActionNames.INQUIRE_POINT,
+        actionName = ActionNames.INSERT_USER_TAG,
+        importantParameter = {"point"},
         returnParameter = {"point", "userId"},
         parametersConfigs = {UserEntity.class},
         response = true,
         group = ActionGroupNames.USER,
-        description = "查询用户点数")
-public class InquirePointServiceImpl implements Service {
-
+        description = "充值获取点数")
+public class InsertUserTagServiceImpl implements Service {
+    
     @InjectLocalService()
     private UserLocalService userLocalService;
-
+    
     @Override
     public void execute(MessageContext messageContext) {
         Session session = messageContext.getSession();
@@ -35,7 +37,11 @@ public class InquirePointServiceImpl implements Service {
         if (userEntity == null) {
             messageContext.setFlag(ResponseFlags.FAILURE_USER_ID_NOT_EXIST);
         } else {
-            messageContext.setEntityData(userEntity);
+            long point = Long.parseLong(messageContext.getParameter("point"));
+            point = this.userLocalService.increasePoint(userId, point);
+            Map<String, String> resultMap = userEntity.toMap();
+            resultMap.put("point", Long.toString(point));
+            messageContext.setMapData(resultMap);
             messageContext.success();
         }
     }

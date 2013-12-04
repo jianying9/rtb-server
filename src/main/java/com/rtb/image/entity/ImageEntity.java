@@ -1,5 +1,6 @@
 package com.rtb.image.entity;
 
+import com.rtb.config.RedisTableNames;
 import com.wolf.framework.dao.Entity;
 import com.wolf.framework.dao.annotation.ColumnTypeEnum;
 import com.wolf.framework.dao.annotation.RColumnConfig;
@@ -17,13 +18,13 @@ import java.util.Map;
  * @author aladdin
  */
 @RDaoConfig(
-        tableName = "RtbImage")
+        tableName = RedisTableNames.RTB_IMAGE)
 @ParametersConfig()
 public final class ImageEntity extends Entity implements Parameter {
 
-    @ParameterConfig(basicTypeEnum = BasicTypeEnum.UUID, desc = "图片id")
+    @ParameterConfig(basicTypeEnum = BasicTypeEnum.LONG, desc = "图片id")
     @RColumnConfig(columnTypeEnum = ColumnTypeEnum.KEY, desc = "图片id")
-    private String imageId;
+    private long imageId;
     //
     @ParameterConfig(basicTypeEnum = BasicTypeEnum.IMAGE, desc = "图片文件内容")
     @RColumnConfig(desc = "文件内容")
@@ -33,7 +34,7 @@ public final class ImageEntity extends Entity implements Parameter {
     @RColumnConfig(desc = "创建时间")
     private long createTime;
 
-    public String getImageId() {
+    public long getImageId() {
         return imageId;
     }
 
@@ -47,13 +48,13 @@ public final class ImageEntity extends Entity implements Parameter {
 
     @Override
     public String getKeyValue() {
-        return this.imageId;
+        return Long.toString(this.imageId);
     }
 
     @Override
     public Map<String, String> toMap() {
         Map<String, String> map = new HashMap<String, String>(4, 1);
-        map.put("imageId", this.imageId);
+        map.put("imageId", Long.toString(this.imageId));
         map.put("dataUrl", this.dataUrl);
         map.put("createTime", Long.toString(this.createTime));
         return map;
@@ -61,7 +62,7 @@ public final class ImageEntity extends Entity implements Parameter {
 
     @Override
     protected void parseMap(Map<String, String> entityMap) {
-        this.imageId = entityMap.get("imageId");
+        this.imageId = Long.parseLong(entityMap.get("imageId"));
         this.dataUrl = entityMap.get("dataUrl");
         this.createTime = Long.parseLong(entityMap.get("createTime"));
     }

@@ -6,7 +6,6 @@ import com.rtb.config.ResponseFlags;
 import com.rtb.user.entity.UserEntity;
 import com.rtb.user.localservice.UserLocalService;
 import com.wolf.framework.local.InjectLocalService;
-import com.wolf.framework.service.ParameterTypeEnum;
 import com.wolf.framework.service.Service;
 import com.wolf.framework.service.ServiceConfig;
 import com.wolf.framework.worker.context.MessageContext;
@@ -18,7 +17,6 @@ import java.util.Map;
  */
 @ServiceConfig(
         actionName = ActionNames.REGISTER,
-        parameterTypeEnum = ParameterTypeEnum.PARAMETER,
         importantParameter = {"nickName", "userEmail", "password"},
         returnParameter = {"userId", "userEmail"},
         parametersConfigs = {UserEntity.class},

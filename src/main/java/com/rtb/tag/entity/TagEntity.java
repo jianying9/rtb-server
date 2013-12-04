@@ -1,5 +1,6 @@
-package com.rtb.ad.entity;
+package com.rtb.tag.entity;
 
+import com.rtb.config.RedisTableNames;
 import com.wolf.framework.dao.Entity;
 import com.wolf.framework.dao.annotation.ColumnTypeEnum;
 import com.wolf.framework.dao.annotation.RColumnConfig;
@@ -17,13 +18,13 @@ import java.util.Map;
  * @author aladdin
  */
 @RDaoConfig(
-        tableName = "RtbTag")
+        tableName = RedisTableNames.RTB_TAG)
 @ParametersConfig()
 public final class TagEntity extends Entity implements Parameter {
 
-    @ParameterConfig(basicTypeEnum = BasicTypeEnum.INT, desc = "标签id")
+    @ParameterConfig(basicTypeEnum = BasicTypeEnum.LONG, desc = "标签id")
     @RColumnConfig(columnTypeEnum = ColumnTypeEnum.KEY, desc = "标签id")
-    private String tagId;
+    private long tagId;
     //
     @ParameterConfig(basicTypeEnum = BasicTypeEnum.CHAR_10, desc = "标签名")
     @RColumnConfig(desc = "标签名")
@@ -33,7 +34,7 @@ public final class TagEntity extends Entity implements Parameter {
     @RColumnConfig(desc = "创建时间")
     private long createTime;
 
-    public String getTagId() {
+    public long getTagId() {
         return this.tagId;
     }
 
@@ -47,13 +48,13 @@ public final class TagEntity extends Entity implements Parameter {
 
     @Override
     public String getKeyValue() {
-        return this.tagId;
+        return Long.toString(this.tagId);
     }
 
     @Override
     public Map<String, String> toMap() {
         Map<String, String> map = new HashMap<String, String>(4, 1);
-        map.put("tagId", this.tagId);
+        map.put("tagId", Long.toString(this.tagId));
         map.put("tagName", tagName);
         map.put("createTime", Long.toString(this.createTime));
         return map;
@@ -61,7 +62,7 @@ public final class TagEntity extends Entity implements Parameter {
 
     @Override
     protected void parseMap(Map<String, String> entityMap) {
-        this.tagId = entityMap.get("tagId");
+        this.tagId = Long.parseLong(entityMap.get("tagId"));
         this.tagName = entityMap.get("tagName");
         this.createTime = Long.parseLong(entityMap.get("createTime"));
     }

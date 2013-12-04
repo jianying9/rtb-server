@@ -12,4 +12,5 @@ public class ActionGroupNames {
     
     public final static String AD = "广告接口";
     
+    public final static String TAG = "标签接口";
 }

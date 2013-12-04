@@ -1,5 +1,6 @@
 package com.rtb.user.entity;
 
+import com.rtb.config.RedisTableNames;
 import com.wolf.framework.dao.Entity;
 import com.wolf.framework.dao.annotation.ColumnTypeEnum;
 import com.wolf.framework.dao.annotation.RColumnConfig;
@@ -17,13 +18,13 @@ import java.util.Map;
  * @author aladdin
  */
 @RDaoConfig(
-        tableName = "RtbUser")
+        tableName = RedisTableNames.RTB_USER)
 @ParametersConfig()
 public final class UserEntity extends Entity implements Parameter {
 
-    @ParameterConfig(basicTypeEnum = BasicTypeEnum.UUID, desc = "用户id")
+    @ParameterConfig(basicTypeEnum = BasicTypeEnum.LONG, desc = "用户id")
     @RColumnConfig(columnTypeEnum = ColumnTypeEnum.KEY, desc = "用户ID")
-    private String userId;
+    private long userId;
     //
     @ParameterConfig(basicTypeEnum = BasicTypeEnum.CHAR_32, desc = "昵称")
     @RColumnConfig(desc = "昵称")
@@ -45,7 +46,7 @@ public final class UserEntity extends Entity implements Parameter {
     @RColumnConfig(desc = "注册时间")
     private long createTime;
 
-    public String getUserId() {
+    public long getUserId() {
         return userId;
     }
 
@@ -71,13 +72,13 @@ public final class UserEntity extends Entity implements Parameter {
 
     @Override
     public String getKeyValue() {
-        return this.userId;
+        return Long.toString(this.userId);
     }
 
     @Override
     public Map<String, String> toMap() {
         Map<String, String> map = new HashMap<String, String>(8, 1);
-        map.put("userId", this.userId);
+        map.put("userId", Long.toString(this.userId));
         map.put("nickName", this.nickName);
         map.put("password", this.password);
         map.put("userEmail", this.userEmail);
@@ -88,7 +89,7 @@ public final class UserEntity extends Entity implements Parameter {
 
     @Override
     protected void parseMap(Map<String, String> entityMap) {
-        this.userId = entityMap.get("userId");
+        this.userId = Long.parseLong(entityMap.get("userId"));
         this.nickName = entityMap.get("nickName");
         this.password = entityMap.get("password");
         this.userEmail = entityMap.get("userEmail");

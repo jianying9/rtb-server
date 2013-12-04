@@ -30,7 +30,7 @@ public class InscreaseAdPointServiceImplJUnitTest extends AbstractRtbTest {
     public void test() {
         Map<String, String> parameterMap = new HashMap<String, String>(2, 1);
         parameterMap.put("adPoint", "100");
-        parameterMap.put("adId", "94c1c507-3edb-4a11-be4d-c830c32fd42b");
+        parameterMap.put("adId", "3");
         String result = this.testHandler.execute(ActionNames.INCREASE_AD_POINT, parameterMap);
         System.out.println(result);
     }
