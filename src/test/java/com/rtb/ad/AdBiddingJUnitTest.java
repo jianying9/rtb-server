@@ -31,7 +31,7 @@ public class AdBiddingJUnitTest extends AbstractRtbTest {
         Map<String, String> parameterMap = new HashMap<String, String>(4, 1);
         parameterMap.put("positionId", "1");
         parameterMap.put("adId", "1");
-        parameterMap.put("bid", "3");
+        parameterMap.put("bid", "1");
         parameterMap.put("tagId", "103006");
         String result = this.testHandler.execute(ActionNames.AD_BIDDING, parameterMap);
         System.out.println(result);

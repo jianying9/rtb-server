@@ -40,20 +40,14 @@ public class InquireAdServiceImpl implements Service {
         List<String> adIdList = this.adLocalService.inquireAdIdPageByUserId(userId, pageIndex, pageSize);
         if (adIdList.isEmpty() == false) {
             List<AdEntity> adEntityList = this.adLocalService.inquireAdByAdIdList(adIdList);
-            List<AdPointEntity> adPointEntityList = this.adLocalService.inquireAdPointByAdIdList(adIdList);
+//            List<AdPointEntity> adPointEntityList = this.adLocalService.inquireAdPointByAdIdList(adIdList);
             List<Map<String, String>> resultMapList = new ArrayList<Map<String, String>>(adEntityList.size());
             Map<String, String> resultMap;
-            String adPoint;
+            long adPoint;
             for (AdEntity adEntity : adEntityList) {
                 resultMap = adEntity.toMap();
-                adPoint = "0";
-                for (AdPointEntity adPointEntity : adPointEntityList) {
-                    if (adEntity.getAdId() == adPointEntity.getAdId()) {
-                        adPoint = Long.toString(adPointEntity.getAdPoint());
-                        break;
-                    }
-                }
-                resultMap.put("adPoint", adPoint);
+                adPoint = this.adLocalService.inquireAdPointByAdId(userId, userId);
+                resultMap.put("adPoint", Long.toString(adPoint));
                 resultMapList.add(resultMap);
             }
             messageContext.setMapListData(resultMapList);

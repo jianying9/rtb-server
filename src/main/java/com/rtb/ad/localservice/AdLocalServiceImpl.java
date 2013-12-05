@@ -1,11 +1,16 @@
 package com.rtb.ad.localservice;
 
+import com.nd.rtb.dao.redis.ConfigException;
+import com.nd.rtb.dao.redis.DBConfig;
+import com.nd.rtb.dao.redis.DBConnection;
+import com.nd.rtb.dao.redis.DBConnectionPool;
 import com.rtb.ad.entity.AdBiddingEntity;
 import com.rtb.ad.entity.AdEntity;
 import com.rtb.ad.entity.AdPointEntity;
 import com.rtb.tag.entity.TagEntity;
 import com.rtb.config.RedisTableNames;
 import com.rtb.key.localservice.RedisKeyLocalService;
+import com.rtb.utils.KinitUtil;
 import com.wolf.framework.context.ApplicationContext;
 import com.wolf.framework.dao.REntityDao;
 import com.wolf.framework.dao.annotation.InjectRDao;
@@ -22,7 +27,10 @@ import kafka.javaapi.producer.ProducerData;
 import kafka.producer.ProducerConfig;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.hbase.HBaseConfiguration;
+import org.apache.hadoop.hbase.client.Result;
+import org.apache.hadoop.hbase.client.Get;
 import org.apache.hadoop.hbase.client.HTable;
+import org.apache.hadoop.hbase.client.Put;
 import org.apache.hadoop.hbase.util.Bytes;
 import org.codehaus.jackson.map.ObjectMapper;
 
@@ -60,16 +68,19 @@ public class AdLocalServiceImpl implements AdLocalService {
     //hbase 广告余额
     private final byte[] accountColumnFamily = Bytes.toBytes("ACCOUNT");
     private final byte[] balanceByte = Bytes.toBytes("balance");
+    //rtb redis 集群线程池
+    private DBConnectionPool redisPool;
+    //imei tag表
+    private final String RtbUserTag = "DMP_UserTags";
+    //广告投放表
+    private final String RtbAdWinner = "SSP_AdWinner";
 
     @Override
     public void init() {
         //初始化kafka
-        String zkConnect = ApplicationContext.CONTEXT.getParameter("kafka.zk.connect");
-        Properties props = new Properties();
-        props.put("serializer.class", "kafka.serializer.StringEncoder");
-        props.put("zk.connect", zkConnect);
-        this.producer = new Producer<Integer, String>(new ProducerConfig(props));
-        System.out.println("aaaaaaaaa------------------------------aaaaaaaaaaaa");
+        this.initKafka();
+        //初始化kinit
+        KinitUtil.kinit();
         //初始化hbase
         Configuration config = HBaseConfiguration.create();
         try {
@@ -77,7 +88,13 @@ public class AdLocalServiceImpl implements AdLocalService {
         } catch (IOException ex) {
             throw new RuntimeException(ex);
         }
-        System.out.println("xxxxxxx------------------------------xxxxxxxx");
+        //初始化rtb redis 集群线程池
+        try {
+            DBConfig dbConfig = new DBConfig();
+            this.redisPool = new DBConnectionPool(dbConfig);
+        } catch (ConfigException ex) {
+            throw new RuntimeException(ex);
+        }
     }
 
     @Override
@@ -144,10 +161,23 @@ public class AdLocalServiceImpl implements AdLocalService {
         adPointIdBuilder.append(userId).append('_').append(adId);
         String adPointId = adPointIdBuilder.toString();
         byte[] adPointIdByte = Bytes.toBytes(adPointId);
-        try {
-            newAdPoint = this.adHTable.incrementColumnValue(adPointIdByte, this.accountColumnFamily, this.balanceByte, adPoint, false);
-        } catch (IOException ex) {
-            throw new RuntimeException(ex);
+        Get get = new Get(adPointIdByte);
+        get.addColumn(this.accountColumnFamily, this.balanceByte);
+        long currentAdPoint = 0;
+        synchronized (this) {
+            try {
+                Result result = this.adHTable.get(get);
+                if (result.isEmpty() == false) {
+                    byte[] value = result.getValue(this.accountColumnFamily, this.balanceByte);
+                    currentAdPoint = Long.parseLong(Bytes.toString(value));
+                }
+                newAdPoint = currentAdPoint + adPoint;
+                Put put = new Put(adPointIdByte);
+                put.add(this.accountColumnFamily, this.balanceByte, Bytes.toBytes(Long.toString(newAdPoint)));
+                this.adHTable.put(put);
+            } catch (IOException ex) {
+                throw new RuntimeException(ex);
+            }
         }
 //        newAdPoint = this.adPointEntityDao.increase(adId, "adPoint", adPoint);
         return newAdPoint;
@@ -164,8 +194,27 @@ public class AdLocalServiceImpl implements AdLocalService {
     }
 
     @Override
-    public AdPointEntity inquireAdPointByAdId(String adId) {
-        return this.adPointEntityDao.inquireByKey(adId);
+    public long inquireAdPointByAdId(String userId, String adId) {
+        long adPoint = 0;
+        //构造广告剩余点数id
+        String hexUserId = Long.toHexString(Long.parseLong(userId));
+        String hexAdId = Long.toHexString(Long.parseLong(adId));
+        StringBuilder adPointIdBuilder = new StringBuilder(hexUserId.length() + hexAdId.length() + 1);
+        adPointIdBuilder.append(userId).append('_').append(adId);
+        String adPointId = adPointIdBuilder.toString();
+        byte[] adPointIdByte = Bytes.toBytes(adPointId);
+        Get get = new Get(adPointIdByte);
+        get.addColumn(this.accountColumnFamily, this.balanceByte);
+        try {
+            Result result = this.adHTable.get(get);
+            if (result.isEmpty() == false) {
+                byte[] value = result.getValue(this.accountColumnFamily, this.balanceByte);
+                adPoint = Long.parseLong(Bytes.toString(value));
+            }
+        } catch (IOException ex) {
+            throw new RuntimeException(ex);
+        }
+        return adPoint;
     }
 
     @Override
@@ -191,6 +240,15 @@ public class AdLocalServiceImpl implements AdLocalService {
     @Override
     public void deleteAdBidding(String positionId) {
         this.adBiddingEntityDao.delete(positionId);
+    }
+
+    private synchronized void initKafka() {
+        String zkConnect = ApplicationContext.CONTEXT.getParameter("kafka.zk.connect");
+        Properties props = new Properties();
+        props.put("serializer.class", "kafka.serializer.StringEncoder");
+        props.put("zk.connect", zkConnect);
+        props.put("producer.type", "async");
+        this.producer = new Producer<Integer, String>(new ProducerConfig(props));
     }
 
     @Override
@@ -237,5 +295,67 @@ public class AdLocalServiceImpl implements AdLocalService {
             ProducerData<Integer, String> messageData = new ProducerData<Integer, String>(this.biddingTopic, messageJsonString);
             this.producer.send(messageData);
         }
+    }
+
+    @Override
+    public Map<String, String> inquireAdBiddingByPositionId(String positionId, String imei) {
+        Map<String, String> resultMap = null;
+        DBConnection dbConnection = this.redisPool.getConnection();
+        try {
+            String tagIds = dbConnection.query(this.RtbUserTag, imei);
+            if (tagIds != null) {
+                //imei的标签id集合使用,分隔
+                String[] tagIdArray = tagIds.split(",");
+                if (tagIdArray.length > 0) {
+                    //广告投放id等于标签tagId + '-' + 广告位置posId
+                    String sspId;
+                    StringBuilder sspIdBuilder = new StringBuilder(32);
+                    String adWinnerValue;
+                    //广告记录id等于广告组dspId + '_' + 广告adId,两个id为16进制字符串
+                    String dspAdId;
+                    String[] dspAdArray;
+                    String hexAdId;
+                    String adId;
+                    //最大得分
+                    double maxPoint = 0;
+                    long price;
+                    double ctr;
+                    double point;
+                    String[] adWinnerValueArray;
+                    for (String tagId : tagIdArray) {
+                        //根据标签tagId和广告位置posId查询广告投放信息
+                        sspIdBuilder.append(tagId).append('-').append(positionId);
+                        sspId = sspIdBuilder.toString();
+                        sspIdBuilder.setLength(0);
+                        adWinnerValue = dbConnection.query(this.RtbAdWinner, sspId);
+                        if(adWinnerValue != null) {
+                            adWinnerValue = adWinnerValue.substring(1, adWinnerValue.length() - 1);
+                            adWinnerValueArray = adWinnerValue.split(",");
+                            if(adWinnerValueArray.length == 3) {
+                                price = Long.parseLong(adWinnerValueArray[1]);
+                                ctr = Double.parseDouble(adWinnerValueArray[2]);
+                                point = price * ctr;
+                                if(point > maxPoint) {
+                                    maxPoint =  point;
+                                    dspAdId = adWinnerValueArray[0];
+                                    dspAdArray = dspAdId.split("_");
+                                    if(dspAdArray.length == 2) {
+                                        hexAdId = dspAdArray[1];
+                                        adId = Long.toString(Long.parseLong(hexAdId, 16));
+                                        resultMap = new HashMap<String, String>(4, 1);
+                                        resultMap.put("adId", adId);
+                                        resultMap.put("tagId", tagId);
+                                        resultMap.put("bid", Long.toString(price));
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        } finally {
+            this.redisPool.releaseConn(dbConnection);
+        }
+        return resultMap;
     }
 }

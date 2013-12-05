@@ -36,7 +36,7 @@ public interface AdLocalService extends Local {
 
     public void updateAdPoint(Map<String, String> parameterMap);
 
-    public AdPointEntity inquireAdPointByAdId(String adId);
+    public long inquireAdPointByAdId(String userId, String adId);
 
     public long increaseAdPoint(String userId, String adId, long adPoint);
 
@@ -54,4 +54,6 @@ public interface AdLocalService extends Local {
     public void sendLaunchMessage(String userId, String adId, String positionId, String tagId, String bid);
 
     public void sendBiddingMessage(String userId, String adId, String positionId, String tagId, String bid);
+    
+    public Map<String, String> inquireAdBiddingByPositionId(String positionId, String imei);
 }

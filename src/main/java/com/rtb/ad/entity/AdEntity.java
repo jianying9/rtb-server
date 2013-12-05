@@ -101,11 +101,12 @@ public final class AdEntity extends Entity implements Parameter {
 
     @Override
     public Map<String, String> toMap() {
-        Map<String, String> map = new HashMap<String, String>(8, 1);
+        Map<String, String> map = new HashMap<String, String>(16, 1);
         map.put("adId", Long.toString(this.adId));
         map.put("adName", this.adName);
         map.put("imageId", this.imageId);
         map.put("url", this.url);
+        map.put("userId", this.userId);
         map.put("clickNumber", Long.toString(this.clickNumber));
         map.put("clickPoint", Long.toString(this.clickPoint));
         map.put("createTime", Long.toString(this.createTime));
@@ -119,6 +120,7 @@ public final class AdEntity extends Entity implements Parameter {
         this.adName = entityMap.get("adName");
         this.imageId = entityMap.get("imageId");
         this.url = entityMap.get("url");
+        this.userId = entityMap.get("userId");
         this.clickNumber = Long.parseLong(entityMap.get("clickNumber"));
         this.clickPoint = Long.parseLong(entityMap.get("clickPoint"));
         this.createTime = Long.parseLong(entityMap.get("createTime"));

@@ -32,33 +32,21 @@ public class ClickAdServiceImpl implements Service {
     @Override
     public void execute(MessageContext messageContext) {
         //查询广告信息
-//        String adId = messageContext.getParameter("adId");
-//        AdEntity adEntity = this.adLocalService.inquireAdByAdId(adId);
-//        if (adEntity != null) {
-//            String bidStr = messageContext.getParameter("bid");
-//            long bid = Long.parseLong(bidStr);
-//            AdPointEntity adPointEntity = this.adLocalService.inquireAdPointByAdId(adId);
-//            if (adPointEntity != null) {
-//                //扣点
-//                long newAdPoint = this.adLocalService.increaseAdPoint("", adId, -bid);
-//                //如果adPoint <= 0,则空出广告位
-//                String positionId = messageContext.getParameter("positionId");
-//                if (newAdPoint <= 0) {
-//                    AdBiddingEntity adBiddingEntity = this.adLocalService.inquireAdBiddingByPositionId(positionId);
-//                    if (adBiddingEntity != null) {
-//                        if (adBiddingEntity.getAdId().equals(adId)) {
-//                            this.adLocalService.deleteAdBidding(positionId);
-//                        }
-//                    }
-//                }
-//                //广告累计统计
-//                this.adLocalService.increaseClickNum(adId, 1);
-//                this.adLocalService.increaseClickPoint(adId, bid);
-//                //发送广告点击消息到kafka
-//                String userId = messageContext.getParameter("userId");
-//                String tagId = messageContext.getParameter("tagId");
-//                this.adLocalService.sendLaunchMessage(userId, adId, positionId, tagId, bidStr);
-//            }
-//        }
+        String adId = messageContext.getParameter("adId");
+        AdEntity adEntity = this.adLocalService.inquireAdByAdId(adId);
+        if (adEntity != null) {
+            String bidStr = messageContext.getParameter("bid");
+            long bid = Long.parseLong(bidStr);
+            //扣点
+            //如果adPoint <= 0,则空出广告位
+            String positionId = messageContext.getParameter("positionId");
+            //广告累计统计
+            this.adLocalService.increaseClickNum(adId, 1);
+            this.adLocalService.increaseClickPoint(adId, bid);
+            //发送广告点击消息到kafka
+            String userId = messageContext.getParameter("userId");
+            String tagId = messageContext.getParameter("tagId");
+            this.adLocalService.sendLaunchMessage(userId, adId, positionId, tagId, bidStr);
+        }
     }
 }
