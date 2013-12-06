@@ -29,6 +29,7 @@ public class InquireAdJUnitTest extends AbstractRtbTest {
     @Test
     public void test() {
         Map<String, String> parameterMap = new HashMap<String, String>(2, 1);
+        parameterMap.put("pageSize", "2");
         String result = this.testHandler.execute(ActionNames.INQUIRE_AD, parameterMap);
         System.out.println(result);
     }

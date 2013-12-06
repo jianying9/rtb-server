@@ -46,7 +46,7 @@ public class InquireAdServiceImpl implements Service {
             long adPoint;
             for (AdEntity adEntity : adEntityList) {
                 resultMap = adEntity.toMap();
-                adPoint = this.adLocalService.inquireAdPointByAdId(userId, userId);
+                adPoint = this.adLocalService.inquireAdPointByAdId(userId, adEntity.getKeyValue());
                 resultMap.put("adPoint", Long.toString(adPoint));
                 resultMapList.add(resultMap);
             }

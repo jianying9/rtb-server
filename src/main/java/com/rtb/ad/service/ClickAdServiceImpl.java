@@ -2,7 +2,6 @@ package com.rtb.ad.service;
 
 import com.rtb.ad.entity.AdBiddingEntity;
 import com.rtb.ad.entity.AdEntity;
-import com.rtb.ad.entity.AdPointEntity;
 import com.rtb.ad.localservice.AdLocalService;
 import com.rtb.config.ActionGroupNames;
 import com.rtb.config.ActionNames;
@@ -21,7 +20,7 @@ import com.wolf.framework.worker.context.MessageContext;
         importantParameter = {"positionId", "adId", "bid", "userId", "tagId"},
         parametersConfigs = {AdBiddingEntity.class, AdEntity.class, TagEntity.class},
         validateSession = false,
-        response = false,
+        response = true,
         description = "广告点击",
         group = ActionGroupNames.AD)
 public class ClickAdServiceImpl implements Service {
@@ -47,6 +46,7 @@ public class ClickAdServiceImpl implements Service {
             String userId = messageContext.getParameter("userId");
             String tagId = messageContext.getParameter("tagId");
             this.adLocalService.sendLaunchMessage(userId, adId, positionId, tagId, bidStr);
+            messageContext.success();
         }
     }
 }

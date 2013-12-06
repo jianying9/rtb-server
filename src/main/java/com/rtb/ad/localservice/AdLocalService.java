@@ -56,4 +56,6 @@ public interface AdLocalService extends Local {
     public void sendBiddingMessage(String userId, String adId, String positionId, String tagId, String bid);
     
     public Map<String, String> inquireAdBiddingByPositionId(String positionId, String imei);
+    
+    public String inquireImeiTag(String imei);
 }

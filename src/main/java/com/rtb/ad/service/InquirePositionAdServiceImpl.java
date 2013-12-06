@@ -2,6 +2,7 @@ package com.rtb.ad.service;
 
 import com.rtb.ad.entity.AdBiddingEntity;
 import com.rtb.ad.entity.AdEntity;
+import com.rtb.ad.entity.AdParameter;
 import com.rtb.ad.localservice.AdLocalService;
 import com.rtb.config.ActionGroupNames;
 import com.rtb.config.ActionNames;
@@ -20,9 +21,9 @@ import java.util.Map;
  */
 @ServiceConfig(
         actionName = ActionNames.INQUIRE_POSITION_AD,
-        importantParameter = {"positionId", "userId"},
+        importantParameter = {"positionId", "imei"},
         returnParameter = {"positionId", "adId", "bid", "adName", "url", "dataUrl", "userId", "tagId"},
-        parametersConfigs = {AdBiddingEntity.class, AdEntity.class, ImageEntity.class, TagEntity.class},
+        parametersConfigs = {AdBiddingEntity.class, AdEntity.class, ImageEntity.class, TagEntity.class, AdParameter.class},
         validateSession = false,
         response = true,
         description = "查询广告位广告",
@@ -38,8 +39,7 @@ public class InquirePositionAdServiceImpl implements Service {
     @Override
     public void execute(MessageContext messageContext) {
         String positionId = messageContext.getParameter("positionId");
-        String imei = messageContext.getParameter("userId");
-//        String imei = "353922050040300";
+        String imei = messageContext.getParameter("imei");
         Map<String, String> adBiddingMap = this.adLocalService.inquireAdBiddingByPositionId(positionId, imei);
         if (adBiddingMap == null) {
             //无投放广告竞价信息

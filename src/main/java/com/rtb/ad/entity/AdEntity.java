@@ -46,7 +46,7 @@ public final class AdEntity extends Entity implements Parameter {
     @RColumnConfig(desc = "累计点击消耗点数")
     private long clickPoint;
     //
-    @ParameterConfig(basicTypeEnum = BasicTypeEnum.UUID, desc = "用户id")
+    @ParameterConfig(basicTypeEnum = BasicTypeEnum.LONG, desc = "用户id")
     @RColumnConfig(columnTypeEnum = ColumnTypeEnum.INDEX, desc = "用户id")
     private String userId;
     //

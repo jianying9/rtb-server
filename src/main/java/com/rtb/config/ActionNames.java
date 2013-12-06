@@ -42,4 +42,6 @@ public class ActionNames {
     //------------------------------
     //新增标签
     public final static String INSERT_TAG = "INSERT_TAG";
+    //查询用户标签
+    public final static String INQUIRE_TAG = "INQUIRE_TAG";
 }

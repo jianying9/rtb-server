@@ -358,4 +358,19 @@ public class AdLocalServiceImpl implements AdLocalService {
         }
         return resultMap;
     }
+
+    @Override
+    public String inquireImeiTag(String imei) {
+        String result = "";
+        DBConnection dbConnection = this.redisPool.getConnection();
+        try {
+            String tagIds = dbConnection.query(this.RtbUserTag, imei);
+            if (tagIds != null) {
+                result = tagIds;
+            }
+        } finally {
+            this.redisPool.releaseConn(dbConnection);
+        }
+        return result;
+    }
 }
