@@ -1,6 +1,7 @@
 package com.rtb.ad.service;
 
 import com.rtb.ad.entity.AdBiddingEntity;
+import com.rtb.ad.entity.AdEntity;
 import com.rtb.ad.localservice.AdLocalService;
 import com.rtb.config.ActionGroupNames;
 import com.rtb.config.ActionNames;
@@ -18,7 +19,8 @@ import java.util.Map;
 @ServiceConfig(
         actionName = ActionNames.AD_BIDDING,
         importantParameter = {"positionId", "bid", "adId", "tagId"},
-        parametersConfigs = {AdBiddingEntity.class, TagEntity.class},
+        returnParameter = {"adId"},
+        parametersConfigs = {AdBiddingEntity.class, TagEntity.class, AdEntity.class},
         response = true,
         description = "广告竞价",
         group = ActionGroupNames.AD)
@@ -51,6 +53,7 @@ public class AdBiddingServiceImpl implements Service {
 //            }
             //发送竞价消息
             this.adLocalService.sendBiddingMessage(userId, adId, positionId, tagId, bidStr);
+            messageContext.setMapData(parameterMap);
             messageContext.success();
         }
     }

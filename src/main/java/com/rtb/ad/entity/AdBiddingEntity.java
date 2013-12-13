@@ -31,7 +31,6 @@ public final class AdBiddingEntity extends Entity implements Parameter {
     @RColumnConfig(desc = "广告位id")
     private long positionId;
     //
-    @ParameterConfig(basicTypeEnum = BasicTypeEnum.UUID, desc = "广告id")
     @RColumnConfig(desc = "广告id")
     private long adId;
     //
