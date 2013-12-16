@@ -260,7 +260,7 @@ public class AdLocalServiceImpl implements AdLocalService {
         messageMap.put("AdID", hexAdId);
         messageMap.put("PosID", positionId);
         messageMap.put("TagID", tagId);
-        messageMap.put("Price", bid);
+        messageMap.put("price", bid);
         ObjectMapper mapper = new ObjectMapper();
         String messageJsonString = "";
         try {
@@ -283,7 +283,7 @@ public class AdLocalServiceImpl implements AdLocalService {
         messageMap.put("AdID", hexAdId);
         messageMap.put("PosID", positionId);
         messageMap.put("TagID", tagId);
-        messageMap.put("Price", bid);
+        messageMap.put("price", bid);
         ObjectMapper mapper = new ObjectMapper();
         String messageJsonString = "";
         try {
