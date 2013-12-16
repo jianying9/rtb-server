@@ -257,9 +257,9 @@ public class AdLocalServiceImpl implements AdLocalService {
         String hexUserId = Long.toHexString(Long.parseLong(userId));
         String hexAdId = Long.toHexString(Long.parseLong(adId));
         messageMap.put("DSPID", hexUserId);
-        messageMap.put("AdId", hexAdId);
-        messageMap.put("PosId", positionId);
-        messageMap.put("TagId", tagId);
+        messageMap.put("AdID", hexAdId);
+        messageMap.put("PosID", positionId);
+        messageMap.put("TagID", tagId);
         messageMap.put("Price", bid);
         ObjectMapper mapper = new ObjectMapper();
         String messageJsonString = "";
@@ -280,9 +280,9 @@ public class AdLocalServiceImpl implements AdLocalService {
         String hexUserId = Long.toHexString(Long.parseLong(userId));
         String hexAdId = Long.toHexString(Long.parseLong(adId));
         messageMap.put("DSPID", hexUserId);
-        messageMap.put("AdId", hexAdId);
-        messageMap.put("PosId", positionId);
-        messageMap.put("TagId", tagId);
+        messageMap.put("AdID", hexAdId);
+        messageMap.put("PosID", positionId);
+        messageMap.put("TagID", tagId);
         messageMap.put("Price", bid);
         ObjectMapper mapper = new ObjectMapper();
         String messageJsonString = "";
