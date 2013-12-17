@@ -199,11 +199,11 @@ public class AdLocalServiceImpl implements AdLocalService {
         //构造广告剩余点数id
         String hexUserId = Long.toHexString(Long.parseLong(userId));
         String hexAdId = Long.toHexString(Long.parseLong(adId));
-        StringBuilder adPointIdBuilder = new StringBuilder(hexUserId.length() + hexAdId.length() + 1);
-        adPointIdBuilder.append(userId).append('_').append(adId);
-        String adPointId = adPointIdBuilder.toString();
-        byte[] adPointIdByte = Bytes.toBytes(adPointId);
-        Get get = new Get(adPointIdByte);
+        StringBuilder dspAdIdBuilder = new StringBuilder(hexUserId.length() + hexAdId.length() + 1);
+        dspAdIdBuilder.append(userId).append('_').append(adId);
+        String dspAdId = dspAdIdBuilder.toString();
+        byte[] dspAdIdByte = Bytes.toBytes(dspAdId);
+        Get get = new Get(dspAdIdByte);
         get.addColumn(this.accountColumnFamily, this.balanceByte);
         try {
             Result result = this.adHTable.get(get);
@@ -321,6 +321,11 @@ public class AdLocalServiceImpl implements AdLocalService {
                     long price;
                     double ctr;
                     double point;
+                    long adPoint = 0;
+                    byte[] adPointByte;
+                    byte[] dspAdIdByte;
+                    Get get;
+                    Result result;
                     String[] adWinnerValueArray;
                     for (String tagId : tagIdArray) {
                         //根据标签tagId和广告位置posId查询广告投放信息
@@ -328,24 +333,36 @@ public class AdLocalServiceImpl implements AdLocalService {
                         sspId = sspIdBuilder.toString();
                         sspIdBuilder.setLength(0);
                         adWinnerValue = dbConnection.query(this.RtbAdWinner, sspId);
-                        if(adWinnerValue != null) {
+                        if (adWinnerValue != null) {
                             adWinnerValue = adWinnerValue.substring(1, adWinnerValue.length() - 1);
                             adWinnerValueArray = adWinnerValue.split(",");
-                            if(adWinnerValueArray.length == 3) {
+                            if (adWinnerValueArray.length == 3) {
                                 price = Long.parseLong(adWinnerValueArray[1]);
                                 ctr = Double.parseDouble(adWinnerValueArray[2]);
                                 point = price * ctr;
-                                if(point > maxPoint) {
-                                    maxPoint =  point;
+                                if (point > maxPoint) {
                                     dspAdId = adWinnerValueArray[0];
-                                    dspAdArray = dspAdId.split("_");
-                                    if(dspAdArray.length == 2) {
-                                        hexAdId = dspAdArray[1];
-                                        adId = Long.toString(Long.parseLong(hexAdId, 16));
-                                        resultMap = new HashMap<String, String>(4, 1);
-                                        resultMap.put("adId", adId);
-                                        resultMap.put("tagId", tagId);
-                                        resultMap.put("bid", Long.toString(price));
+                                    //验证广告是否还有余额
+                                    dspAdIdByte = Bytes.toBytes(dspAdId);
+                                    get = new Get(dspAdIdByte);
+                                    get.addColumn(this.accountColumnFamily, this.balanceByte);
+                                    result = this.adHTable.get(get);
+                                    if (result.isEmpty() == false) {
+                                        adPointByte = result.getValue(this.accountColumnFamily, this.balanceByte);
+                                        adPoint = Long.parseLong(Bytes.toString(adPointByte));
+                                    }
+                                    if (adPoint > 100 && adPoint >= price) {
+                                        //广告余额大于100并且大于投放价格
+                                        dspAdArray = dspAdId.split("_");
+                                        if (dspAdArray.length == 2) {
+                                            maxPoint = point;
+                                            hexAdId = dspAdArray[1];
+                                            adId = Long.toString(Long.parseLong(hexAdId, 16));
+                                            resultMap = new HashMap<String, String>(4, 1);
+                                            resultMap.put("adId", adId);
+                                            resultMap.put("tagId", tagId);
+                                            resultMap.put("bid", Long.toString(price));
+                                        }
                                     }
                                 }
                             }
@@ -353,6 +370,8 @@ public class AdLocalServiceImpl implements AdLocalService {
                     }
                 }
             }
+        } catch (IOException ex) {
+            throw new RuntimeException(ex);
         } finally {
             this.redisPool.releaseConn(dbConnection);
         }

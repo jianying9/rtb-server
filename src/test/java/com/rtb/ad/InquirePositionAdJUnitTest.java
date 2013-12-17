@@ -29,8 +29,8 @@ public class InquirePositionAdJUnitTest extends AbstractRtbTest {
     @Test
     public void test() {
         Map<String, String> parameterMap = new HashMap<String, String>(2, 1);
-        parameterMap.put("positionId", "2");
-        parameterMap.put("imei", "353922050040300");
+        parameterMap.put("positionId", "0");
+        parameterMap.put("imei", "353440053340700");
         String result = this.testHandler.execute(ActionNames.INQUIRE_POSITION_AD, parameterMap);
         System.out.println(result);
     }
